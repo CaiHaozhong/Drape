@@ -1,0 +1,24 @@
+﻿生成启动时间为 2015/11/17 21:55:49。
+     1>项目“D:\Develop\project\Drape\Drape\Drape.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         D:\Install\VisualStudio\VC\bin\CL.exe /c /ID:\Develop\Qt\4.8.6\include /ID:\Develop\Qt\4.8.6\include\QtGui /ID:\Develop\Qt\4.8.6\include\QtOpenGL /ID:\Develop\Qt\4.8.6\include\QtCore /ZI /nologo /W3 /WX- /Od /Oy- /D _USE_MATH_DEFINES /D NOMINMAX /D OM_STATIC_BUILD /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt MeshViewer.cpp main.cpp moc_MeshViewer.cpp
+         MeshViewer.cpp
+     1>d:\develop\project\drape\drape\meshviewer.cpp(104): warning C4002: “assert”宏的实参太多
+         正在生成代码...
+         正在编译...
+         moc_MeshViewer.cpp
+         main.cpp
+         正在生成代码...
+       Link:
+         D:\Install\VisualStudio\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Develop\project\Drape\Debug\Drape.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\Develop\project\Drape\libs /LIBPATH:D:\Develop\Qt\4.8.6\lib OpenMeshCored.lib OpenMeshToolsd.lib QtOpenGLd4.lib QtGuid4.lib QtCored4.lib qtmaind.lib glu32.lib opengl32.lib glew32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Develop\project\Drape\Debug\Drape.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Develop\project\Drape\Debug\Drape.lib" /MACHINE:X86 Debug\main.obj
+         Debug\MainWindowConstrctor.obj
+         Debug\MeshViewer.obj
+         Debug\moc_MeshViewer.obj
+         Debug\moc_QGLViewWidget.obj
+         Debug\QGLViewerWidget.obj
+         Drape.vcxproj -> D:\Develop\project\Drape\Debug\Drape.exe
+     1>已完成生成项目“D:\Develop\project\Drape\Drape\Drape.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:17.21
