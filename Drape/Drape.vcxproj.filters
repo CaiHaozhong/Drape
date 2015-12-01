@@ -18,30 +18,99 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindowConstrctor.cpp">
+    <ClCompile Include="Data\MeshContainer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="MeshViewer.cpp">
+    <ClCompile Include="Logic\SkeletonExtractor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="moc_MeshViewer.cpp">
+    <ClCompile Include="View\MainWindowConstrctor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="moc_QGLViewWidget.cpp">
+    <ClCompile Include="View\MeshViewer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="QGLViewerWidget.cpp">
+    <ClCompile Include="View\moc_MeshViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\moc_QGLViewWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\QGLViewerWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\MeshDef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\SkeletonDef.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Data\SkeletonContainer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\SkeletonViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\moc_SkeletonViewer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\CompositionWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\moc_CompositionWidget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\arthurstyle.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\arthurwidgets.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\moc_arthurwidgets.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\shared.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainWindowConstrctor.h">
+    <ClInclude Include="Data\MeshContainer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MeshViewer.h">
+    <ClInclude Include="Logic\SkeletonExtractor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="QGLViewerWidget.h">
+    <ClInclude Include="View\MainWindowConstrctor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\MeshViewer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\QGLViewerWidget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\MeshDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\SkeletonDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Data\SkeletonContainer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\SkeletonViewer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\CompositionWidget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\arthurstyle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\arthurwidgets.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

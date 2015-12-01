@@ -23,7 +23,7 @@
 // 	_mesh.add_property(_geo);
 // }
 
-int main(int argc, char** argv)
+int amain(int argc, char** argv)
 {
 	QApplication::setColorSpec(QApplication::CustomColor);
 	QApplication app(argc,argv);

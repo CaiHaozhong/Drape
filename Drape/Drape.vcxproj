@@ -43,13 +43,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>D:\Develop\Qt\4.8.6\include;D:\Develop\Qt\4.8.6\include\QtGui;D:\Develop\Qt\4.8.6\include\QtOpenGL;D:\Develop\Qt\4.8.6\include\QtCore;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_USE_MATH_DEFINES;NOMINMAX;OM_STATIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>Logic;View;Data;D:\Develop\Qt\4.8.6\include;D:\Develop\Qt\4.8.6\include\QtGui;D:\Develop\Qt\4.8.6\include\QtOpenGL;D:\Develop\Qt\4.8.6\include\QtCore;D:\Develop\boost\boost_1_55_0;D:\Develop\CGAL\build\include;D:\Develop\CGAL\include;D:\Develop\CGAL\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;NOMINMAX;OM_STATIC_BUILD;_CRT_SECURE_NO_WARNINGS;CGAL_EIGEN3_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Develop\project\Drape\libs;D:\Develop\Qt\4.8.6\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenMeshCored.lib;OpenMeshToolsd.lib;QtOpenGLd4.lib;QtGuid4.lib;QtCored4.lib;qtmaind.lib;glu32.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Develop\project\Drape\libs;D:\Develop\Qt\4.8.6\lib;D:\Develop\CGAL\build\lib;D:\Develop\boost\boost_1_55_0\stage\lib;D:\Develop\CGAL\auxiliary\gmp\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenMeshCored.lib;OpenMeshToolsd.lib;QtOpenGLd4.lib;QtGuid4.lib;QtCored4.lib;qtmaind.lib;glu32.lib;opengl32.lib;glew32.lib;libgmp-10.lib;libmpfr-4.lib;libboost_thread-vc110-mt-gd-1_55.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/NODEFAULTLIB:library %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -58,25 +59,52 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>Logic;View;Data;D:\Develop\Qt\4.8.6\include;D:\Develop\Qt\4.8.6\include\QtGui;D:\Develop\Qt\4.8.6\include\QtOpenGL;D:\Develop\Qt\4.8.6\include\QtCore;D:\Develop\boost\boost_1_55_0;D:\Develop\CGAL\build\include;D:\Develop\CGAL\include;D:\Develop\CGAL\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;NOMINMAX;OM_STATIC_BUILD;_CRT_SECURE_NO_WARNINGS;CGAL_EIGEN3_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>D:\Develop\project\Drape\libs;D:\Develop\Qt\4.8.6\lib;D:\Develop\CGAL\build\lib;D:\Develop\boost\boost_1_55_0\stage\lib;D:\Develop\CGAL\auxiliary\gmp\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenMeshCore.lib;OpenMeshTools.lib;QtOpenGL4.lib;QtGui4.lib;QtCore4.lib;qtmain.lib;glu32.lib;opengl32.lib;glew32.lib;libgmp-10.lib;libmpfr-4.lib;libboost_thread-vc110-mt-1_55.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="View\arthurstyle.cpp" />
+    <ClCompile Include="View\arthurwidgets.cpp" />
+    <ClCompile Include="View\CompositionWidget.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainWindowConstrctor.cpp" />
-    <ClCompile Include="MeshViewer.cpp" />
-    <ClCompile Include="moc_MeshViewer.cpp" />
-    <ClCompile Include="moc_QGLViewWidget.cpp" />
-    <ClCompile Include="QGLViewerWidget.cpp" />
+    <ClCompile Include="Data\MeshDef.cpp" />
+    <ClCompile Include="Data\SkeletonDef.cpp" />
+    <ClCompile Include="Data\SkeletonContainer.cpp" />
+    <ClCompile Include="View\moc_arthurwidgets.cpp" />
+    <ClCompile Include="View\moc_CompositionWidget.cpp" />
+    <ClCompile Include="View\moc_SkeletonViewer.cpp" />
+    <ClCompile Include="View\shared.cpp" />
+    <ClCompile Include="View\SkeletonViewer.cpp" />
+    <ClCompile Include="View\MainWindowConstrctor.cpp" />
+    <ClCompile Include="Data\MeshContainer.cpp" />
+    <ClCompile Include="View\MeshViewer.cpp" />
+    <ClCompile Include="View\moc_MeshViewer.cpp" />
+    <ClCompile Include="View\moc_QGLViewWidget.cpp" />
+    <ClCompile Include="View\QGLViewerWidget.cpp" />
+    <ClCompile Include="Logic\SkeletonExtractor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainWindowConstrctor.h" />
-    <ClInclude Include="MeshViewer.h" />
-    <ClInclude Include="QGLViewerWidget.h" />
+    <ClInclude Include="View\arthurstyle.h" />
+    <ClInclude Include="View\arthurwidgets.h" />
+    <ClInclude Include="View\CompositionWidget.h" />
+    <ClInclude Include="Data\MeshDef.h" />
+    <ClInclude Include="Data\SkeletonDef.h" />
+    <ClInclude Include="Data\SkeletonContainer.h" />
+    <ClInclude Include="View\SkeletonViewer.h" />
+    <ClInclude Include="View\MainWindowConstrctor.h" />
+    <ClInclude Include="Data\MeshContainer.h" />
+    <ClInclude Include="View\MeshViewer.h" />
+    <ClInclude Include="View\QGLViewerWidget.h" />
+    <ClInclude Include="Logic\SkeletonExtractor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
