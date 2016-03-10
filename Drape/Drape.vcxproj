@@ -75,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Logic\LaplacianMeshEditor.cpp" />
-    <ClCompile Include="Logic\NNSHelper.cpp" />
+    <ClCompile Include="Logic\KNNSHelper.cpp" />
     <ClCompile Include="Logic\SkeletonUtility.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="View\arthurstyle.cpp" />
@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Logic\LaplacianMeshEditor.h" />
-    <ClInclude Include="Logic\NNSHelper.h" />
+    <ClInclude Include="Logic\KNNSHelper.h" />
     <ClInclude Include="Logic\SkeletonUtility.h" />
     <ClInclude Include="View\arthurstyle.h" />
     <ClInclude Include="View\arthurwidgets.h" />

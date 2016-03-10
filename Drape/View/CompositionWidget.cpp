@@ -65,9 +65,11 @@ CompositionWidget::CompositionWidget(void)
 		skeleton.findNeck();
 		skeleton.findHand();
 	}
-	utility.skeletonMatch(globalSkeletonContainer.getSkeletonRef(0), globalSkeletonContainer.getSkeletonRef(1));
-
-	mSkeletonViewer->updateSkeleton();
+// 	utility.skeletonMatch(globalSkeletonContainer.getSkeletonRef(0), globalSkeletonContainer.getSkeletonRef(1));
+// 
+ 	mSkeletonViewer->updateSkeleton();
+	mMeshViewer->readMesh(QString("dapangziFromOff.obj"));
+	mMeshViewer->readMesh(QString("2.obj"));
 }
 
 

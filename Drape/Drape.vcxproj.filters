@@ -84,7 +84,7 @@
     <ClCompile Include="View\moc_MainWindow.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Logic\NNSHelper.cpp">
+    <ClCompile Include="Logic\KNNSHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="View\MainWindow.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Logic\NNSHelper.h">
+    <ClInclude Include="Logic\KNNSHelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
