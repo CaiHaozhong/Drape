@@ -54,6 +54,7 @@ void SkeletonViewer::updateSkeleton()
 
 void SkeletonViewer::drawSkeleton( const Skeleton& skeleton )
 {
+	glColor3f(1.0f,1.0f,1.0f);
 	glBegin(GL_LINES);
 	BOOST_FOREACH(Skeleton_edge e, boost::edges(skeleton))
 	{
@@ -73,11 +74,42 @@ void SkeletonViewer::drawSkeleton( const Skeleton& skeleton )
 		glVertex3f(s.x(), s.y(), s.z());
 	}
 	glEnd();
-	glPointSize(1);
+	glPointSize(5);
 	glPointSize(10);
-	Kernel::Point_3 point = skeleton[skeleton.neckIndex].point;
+	Kernel::Point_3 point = skeleton[skeleton.mNeckIndex].point;
 	glBegin(GL_POINTS);
 	glVertex3f(point.x(), point.y(), point.z());
 	glEnd();
+	
+// 	glPointSize(8.0);
+// 	glColor3f(1.0f, 0, 0);
+// 	glBegin(GL_POINTS);
+// 	BOOST_FOREACH(Skeleton_vertex v, skeleton.mLeftHandVertices)
+// 	{
+// 		auto s = skeleton[v].point;
+// 		glVertex3f(s.x(), s.y(), s.z());
+// 	}
+// 	glEnd();
+// 
+// 	glPointSize(5.0);
+// 	glColor3f(0, 1.0f, 0);
+// 	glBegin(GL_POINTS);
+// 	BOOST_FOREACH(Skeleton_vertex v, skeleton.mRightHandVertices)
+// 	{
+// 		auto s = skeleton[v].point;
+// 		glVertex3f(s.x(), s.y(), s.z());
+// 	}
+// 	glEnd();
+
+	glPointSize(2);
+	glBegin(GL_POINTS);
+	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(skeleton))
+	{
+		auto s = skeleton[v].point;
+		auto d = skeleton[v].delta;
+		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
+	}
+	glEnd();
+
 	glPointSize(1.0);
 }

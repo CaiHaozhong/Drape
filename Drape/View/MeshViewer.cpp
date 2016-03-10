@@ -5,12 +5,12 @@
 #include <QDebug>
 MeshViewer::MeshViewer(void)
 {
-	initGlew();
+	initGlew();			
 }
 
 MeshViewer::MeshViewer( QWidget* parent ) :QGLViewerWidget(parent)
 {
-	initGlew();
+	initGlew();	
 }
 
 
@@ -21,35 +21,54 @@ MeshViewer::~MeshViewer(void)
 
 void MeshViewer::draw_scene( const std::string& _draw_mode )
 {
-	if (_draw_mode == "Wireframe")
+	if(mVBOBufferNameList.size() == 0)
+		return;
+	glMatrixMode(GL_MODELVIEW);
+	float angle = 0;
+	OpenMesh::Vec3f objCenter = (bbMin+bbMax)*0.5;
+	for(int i = 0; i < 1; i++)
 	{
-		glDisable(GL_LIGHTING);		
-		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);		
-		drawMesh();
-	}
+		angle = i * 72;		
+		glPushMatrix();
+ 		double modelViewMatrix[16];
+ 		glGetDoublev(GL_MODELVIEW_MATRIX, modelViewMatrix);
+// 		glLoadIdentity();
+// 		glRotated(angle, 0, 1, 0);
+// 		glTranslated(0,0, 5);
+// 		glMultMatrixd(modelViewMatrix);
+		glRotated(angle, 0, 1, 0);
+		glTranslated(0,0, 0.3*fabs(modelViewMatrix[14]+objCenter[2]));		
+		if (_draw_mode == "Wireframe")
+		{
+			glDisable(GL_LIGHTING);		
+			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);		
+			drawMesh();
+		}
 
-	else if (_draw_mode == "Solid Flat")
-	{
-		glEnable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-		glShadeModel(GL_FLAT);
-		drawMesh();
-	}
+		else if (_draw_mode == "Solid Flat")
+		{
+			glEnable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+			glShadeModel(GL_FLAT);
+			drawMesh();
+		}
 
-	else if (_draw_mode == "Solid Smooth")
-	{
-		glEnable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-		glShadeModel(GL_SMOOTH);
-		drawMesh();
-	}
-	
-	else if(_draw_mode == "Geodesic")
-	{
-		glDisable(GL_LIGHTING);
-		
-		//glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-		drawPoint();
+		else if (_draw_mode == "Solid Smooth")
+		{
+			glEnable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+			glShadeModel(GL_SMOOTH);
+			drawMesh();
+		}
+
+		else if(_draw_mode == "Geodesic")
+		{
+			glDisable(GL_LIGHTING);
+
+			//glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+			drawPoint();
+		}
+		glPopMatrix();
 	}
 }
 
@@ -184,7 +203,7 @@ void MeshViewer::drawPoint()
 void MeshViewer::adjustScene()
 {
 
-	OpenMesh::Vec3f bbMin, bbMax;
+	//OpenMesh::Vec3f bbMin, bbMax;
 	float maxFloat = std::numeric_limits<float>::max();
 	float minFloat = std::numeric_limits<float>::min();
 	bbMin = OpenMesh::Vec3f(maxFloat,maxFloat,maxFloat);

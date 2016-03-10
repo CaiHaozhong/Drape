@@ -1,6 +1,7 @@
 #include "MainWindowConstrctor.h"
 #include <QApplication>
-#include <QMainWindow>
+#include "MainWindow.h"
+#include "arthurwidgets.h"
 #include <QMenuBar>
 // void readMesh(const QString& fileName)
 // {
@@ -23,15 +24,19 @@
 // 	_mesh.add_property(_geo);
 // }
 
-int amain(int argc, char** argv)
+int main(int argc, char** argv)
 {
 	QApplication::setColorSpec(QApplication::CustomColor);
 	QApplication app(argc,argv);
 	glutInit(&argc,argv);
-	QMainWindow mainWin;
+	MainWindow mainWin;
 	mainWin.resize(640,480);
-	MainWindowConstructor constructor(mainWin);
-	constructor.construct();
+	/* …Ë÷√∑Á∏Ò 
+	QStyle* style = new ArthurStyle;
+	mainWin.setStyle(style);	
+	QList<QWidget *> widgets = mainWin.findChildren<QWidget *>();
+	foreach (QWidget *w, widgets)
+		w->setStyle(style);*/
 	mainWin.show();
 	return app.exec();
 }

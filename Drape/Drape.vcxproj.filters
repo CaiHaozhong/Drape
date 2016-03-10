@@ -24,9 +24,6 @@
     <ClCompile Include="Logic\SkeletonExtractor.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="View\MainWindowConstrctor.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="View\MeshViewer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -75,15 +72,27 @@
     <ClCompile Include="test.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Logic\SkeletonUtility.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic\LaplacianMeshEditor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\MainWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="View\moc_MainWindow.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic\NNSHelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data\MeshContainer.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Logic\SkeletonExtractor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="View\MainWindowConstrctor.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="View\MeshViewer.h">
@@ -111,6 +120,18 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="View\arthurwidgets.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\SkeletonUtility.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\LaplacianMeshEditor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="View\MainWindow.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\NNSHelper.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

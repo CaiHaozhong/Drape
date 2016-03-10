@@ -22,7 +22,7 @@ static const uint qt_meta_data_CompositionWidget[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -31,17 +31,15 @@ static const uint qt_meta_data_CompositionWidget[] = {
 
  // slots: signature, parameters, type, tag, flags
       19,   18,   18,   18, 0x08,
-      35,   18,   18,   18, 0x08,
-      56,   18,   18,   18, 0x08,
-      74,   18,   18,   18, 0x08,
+      37,   18,   18,   18, 0x08,
+      49,   18,   18,   18, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CompositionWidget[] = {
-    "CompositionWidget\0\0open_mesh_gui()\0"
-    "clear_current_mesh()\0extractSkeleton()\0"
-    "moveCloth()\0"
+    "CompositionWidget\0\0extractSkeleton()\0"
+    "moveCloth()\0deformCloth()\0"
 };
 
 void CompositionWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -50,10 +48,9 @@ void CompositionWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         Q_ASSERT(staticMetaObject.cast(_o));
         CompositionWidget *_t = static_cast<CompositionWidget *>(_o);
         switch (_id) {
-        case 0: _t->open_mesh_gui(); break;
-        case 1: _t->clear_current_mesh(); break;
-        case 2: _t->extractSkeleton(); break;
-        case 3: _t->moveCloth(); break;
+        case 0: _t->extractSkeleton(); break;
+        case 1: _t->moveCloth(); break;
+        case 2: _t->deformCloth(); break;
         default: ;
         }
     }
@@ -92,9 +89,9 @@ int CompositionWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 3;
     }
     return _id;
 }

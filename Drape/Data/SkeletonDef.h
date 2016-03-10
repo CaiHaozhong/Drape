@@ -19,13 +19,26 @@ public:
 	{
 		HUMAN,
 		CLOTH
-	};
-	vertex_descriptor neckIndex;
-
-	SkeletonType mType;
+	};	
 
 	void findNeck();
 
-	
+	void findHand();
 
+	std::vector<vertex_descriptor>& getLeftHandVerticesRef()
+	{
+		return mLeftHandVertices;
+	}
+
+
+	std::vector<vertex_descriptor>& getRightHandVerticesRef()
+	{
+		return mRightHandVertices;
+	}
+
+public:
+	vertex_descriptor mNeckIndex;
+	SkeletonType mType;
+	std::vector<vertex_descriptor> mLeftHandVertices;
+	std::vector<vertex_descriptor> mRightHandVertices;
 };

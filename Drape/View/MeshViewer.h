@@ -58,6 +58,7 @@ private:
 
 	void initGlew();
 
+	OpenMesh::Vec3f bbMin, bbMax;
 };
 
 /*#undef BUFFER_OFFSET(bytes)*/

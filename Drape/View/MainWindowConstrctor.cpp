@@ -41,7 +41,6 @@ void MainWindowConstructor::createFileMenu()
 	_openAct->setStatusTip(mMainWindow.tr("Open a mesh file"));
 	fileMenu->addAction(_openAct);
 
-
 	_clearAct = new QAction(mMainWindow.tr("&clear mesh..."), &mMainWindow);
 	_clearAct->setStatusTip(mMainWindow.tr("Clear current mesh"));
 	fileMenu->addAction(_clearAct);

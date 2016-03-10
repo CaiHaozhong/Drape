@@ -1,4 +1,5 @@
 #include "SkeletonContainer.h"
+#include "SkeletonUtility.h"
 
 
 SkeletonContainer::SkeletonContainer(void)
@@ -16,6 +17,8 @@ bool SkeletonContainer::addSkeletonFromMesh( const Mesh& mesh )
 	Skeleton &skeleton = mSkeletonList[mSkeletonList.size()-1];
 	SkeletonExtractor extractor;
 	extractor.extract(mesh, skeleton);
+	SkeletonUtility skeletonUtility;
+	skeletonUtility.write(skeleton,"skeleton.txt");
 	skeleton.findNeck();
 	return true;
 }

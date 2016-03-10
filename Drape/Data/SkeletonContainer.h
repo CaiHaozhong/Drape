@@ -14,6 +14,12 @@ public:
 	int size();
 
 	Skeleton& getSkeletonRef(int i);
+
+	bool pushSkeleton(Skeleton skeleton)
+	{
+		mSkeletonList.push_back(skeleton);
+		return true;
+	}
 private:
 	std::vector<Skeleton> mSkeletonList;
 };

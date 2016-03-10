@@ -38,6 +38,14 @@ void SkeletonExtractor::extract( const Mesh& mesh, Skeleton& skeleton )
 
 	std::cout << "Number of vertices of the skeleton: " << boost::num_vertices(skeleton) << "\n";
 	std::cout << "Number of edges of the skeleton: " << boost::num_edges(skeleton) << "\n";
+
+	// Output skeleton points and the corresponding surface points
+// 	std::ofstream output;
+// 	output.open("correspondance.cgal");
+// 	BOOST_FOREACH(Skeleton_vertex v, vertices(skeleton))
+// 		BOOST_FOREACH(vertex_descriptor vd, skeleton[v].vertices)
+// 		output << "2 " << skeleton[v].point << "  " << boost::get(CGAL::vertex_point, triangle_mesh, vd)  << "\n";
+// 	output.close();
 }
 
 void SkeletonExtractor::convertToSurfaceMesh( const Mesh& mesh, Triangle_mesh& triangle_mesh )

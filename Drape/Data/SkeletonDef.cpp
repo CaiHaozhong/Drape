@@ -28,7 +28,7 @@ void Skeleton::findNeck()
 		printf("%d ",adjV_end-adjV_begin);
 		if(adjV_end - adjV_begin > 2)
 		{
-			neckIndex = tempVertex;
+			mNeckIndex = tempVertex;
 			return;
 		}
 		auto it = adjV_begin;
@@ -60,5 +60,52 @@ void Skeleton::findNeck()
 			tempVertex = *it;
 		}
 		
+	}
+}
+
+void Skeleton::findHand()
+{
+	Skeleton& skeleton = *this;
+	Skeleton::adjacency_iterator begin, end;
+	std::tie(begin, end) = boost::adjacent_vertices(mNeckIndex,*this);
+	vertex_descriptor left = *begin, right = *begin;
+	float leftX = skeleton[left].point.x();
+	float rightX = skeleton[right].point.x();
+	for (auto it = begin; it != end; it++)
+	{
+		float curX = skeleton[*it].point.x();			
+		if(curX < leftX)
+		{
+			left = *it;
+			leftX = curX;
+		}
+		if(curX > rightX)
+		{
+			right = *it;
+			rightX = curX;
+		}
+	}		
+	vertex_descriptor test[2] = {left, right};
+	for (int i = 0; i < 2; i++)
+	{
+		vertex_descriptor cur = test[i];
+		vertex_descriptor lastVisit = mNeckIndex;
+		while (true)
+		{
+			if(i == 0)
+				mLeftHandVertices.push_back(cur);
+			else
+				mRightHandVertices.push_back(cur);
+			vertex_descriptor next = cur;
+			BOOST_FOREACH(vertex_descriptor vd, boost::adjacent_vertices(cur, skeleton))
+			{
+				if(vd != lastVisit)
+					next = vd;
+			}
+			if(next == cur)
+				break;
+			lastVisit = cur;
+			cur = next;
+		}		
 	}
 }

@@ -4,11 +4,11 @@
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerEnvironment>path=%path%;D:\Develop\Qt\4.8.6\bin;D:\Develop\project\Drape\dlls\Debug;D:\Develop\project\Drape\dlls\Release</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>path=%path%;D:\Qt\4.8.6\bin;$(SolutionDir)dlls\Debug;$(SolutionDir)dlls\Release</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerEnvironment>path=%path%;D:\Develop\Qt\4.8.6\bin;D:\Develop\project\Drape\dlls\Debug;D:\Develop\project\Drape\dlls\Release</LocalDebuggerEnvironment>
+    <LocalDebuggerEnvironment>path=%path%;D:\Qt\4.8.6\bin;$(SolutionDir)dlls\Debug;$(SolutionDir)dlls\Release</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

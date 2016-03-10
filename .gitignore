@@ -1,5 +1,9 @@
-
+*.cgal
+*.off
 *.sdf
+*.txt
+*.opensdf
+data/
 =======
 # Compiled Object files
 *.slo

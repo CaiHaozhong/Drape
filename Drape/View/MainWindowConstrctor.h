@@ -11,6 +11,7 @@ public:
 	MainWindowConstructor(QMainWindow& _mainWin);
 
 	~MainWindowConstructor();
+
 	void create_menu();
 
 	void create_mainView();

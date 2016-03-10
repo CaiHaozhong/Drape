@@ -16,15 +16,16 @@ private:
 	MeshViewer* mMeshViewer;
 	SkeletonViewer* mSkeletonViewer;
 
-
+public:
+	MeshViewer* meshViewer();
+	SkeletonViewer* skeletonViewer();
 
 private slots:
-	void open_mesh_gui();
-
-	void clear_current_mesh();
 
 	void extractSkeleton();
 
 	void moveCloth();
+
+	void deformCloth();
 };
 
