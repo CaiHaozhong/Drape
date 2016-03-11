@@ -10,6 +10,8 @@
 #include <tuple>
 #include <fstream>
 #include "MeshContainer.h"
+#include "SkeletonDef.h"
+
 
 #define BUFFER_OFFSET(bytes) ((GLubyte*)NULL + (bytes))
 #define PRINT_ERROR(line) printf("%d:%s",line,gluErrorString(glGetError()));}
@@ -42,9 +44,12 @@ public slots:
 	void clear_current_mesh();
 
 	void updateScene();
+
+	void debugOne();
 private:
 
-
+	void debugDraw();	
+	Skeleton::vertex_iterator curNodeIter;
 
 	std::vector<VBOBufferName> mVBOBufferNameList;
 

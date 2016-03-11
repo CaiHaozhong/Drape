@@ -268,6 +268,10 @@ void LaplacianMeshEditor::setOriginVertexList( std::vector<LaplacianMeshEditorVe
 
 std::vector<LaplacianMeshEditorVertex>* LaplacianMeshEditor::compute()
 {	
+
+	/* Cholesky·Ö½â */
+	factorizeAprimeTxAprime();
+
 	if(mHasFactorize == false)
 	{
 		fprintf(stderr,"You should use 'void factorizeAprimeTxAprime()' first.\n");

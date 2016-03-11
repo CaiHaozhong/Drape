@@ -5,7 +5,7 @@ void Skeleton::findNeck()
 	/* find topest */
 	Skeleton::vertex_iterator v_begin, v_end;
 	std::tie(v_begin,v_end) = boost::vertices(*this);
-	float maxY = (*this)[*v_begin].point.y();
+	double maxY = (*this)[*v_begin].point.y();
 	vertex_descriptor maxVertex = *v_begin;
 	BOOST_FOREACH(vertex_descriptor v, std::make_pair(v_begin,v_end))
 	{			
@@ -69,8 +69,8 @@ void Skeleton::findHand()
 	Skeleton::adjacency_iterator begin, end;
 	std::tie(begin, end) = boost::adjacent_vertices(mNeckIndex,*this);
 	vertex_descriptor left = *begin, right = *begin;
-	float leftX = skeleton[left].point.x();
-	float rightX = skeleton[right].point.x();
+	double leftX = skeleton[left].point.x();
+	double rightX = skeleton[right].point.x();
 	for (auto it = begin; it != end; it++)
 	{
 		float curX = skeleton[*it].point.x();			

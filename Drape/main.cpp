@@ -38,5 +38,6 @@ int main(int argc, char** argv)
 	foreach (QWidget *w, widgets)
 		w->setStyle(style);*/
 	mainWin.show();
+	
 	return app.exec();
 }

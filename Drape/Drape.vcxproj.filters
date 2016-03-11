@@ -87,6 +87,12 @@
     <ClCompile Include="Logic\KNNSHelper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Utility\GLError.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic\ClothDeformer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data\MeshContainer.h">
@@ -132,6 +138,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Logic\KNNSHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\GLError.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\ClothDeformer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

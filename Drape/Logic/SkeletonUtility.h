@@ -2,6 +2,8 @@
 #include "SkeletonContainer.h"
 #include "SkeletonDef.h"
 #include <iostream>
+#include "MeshDef.h"
+#include "KNNSHelper.h"
 class SkeletonUtility
 {
 public:
@@ -17,6 +19,8 @@ public:
 	void readIntoContainer(const char* file);
 
 	void skeletonMatch(Skeleton& human, Skeleton& cloth);
+
+	void recomputeCorrepspondence(Skeleton& skeleton, Mesh& mesh, int numberOfCorrepondencePoint);
 private:
 
 	float dis(Skeleton& skeleton, Skeleton::vertex_descriptor from, Skeleton::vertex_descriptor to);

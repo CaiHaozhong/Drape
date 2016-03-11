@@ -3,6 +3,7 @@
 #include <Eigen/Sparse>
 #include <Eigen/Dense>
 #include <Eigen/SparseCholesky>
+#include <OpenMesh/Core/Geometry/VectorT.hh>
 class LaplacianMeshEditorFace
 {
 public:
@@ -23,6 +24,10 @@ public:
 	double x,y,z;
 	LaplacianMeshEditorVertex(double _x, double _y, double _z):x(_x),y(_y),z(_z){}
 	LaplacianMeshEditorVertex(){}
+	OpenMesh::Vec3d toOpenMeshVector()
+	{
+		return OpenMesh::Vec3d(x,y,z);
+	}
 };
 class LaplacianMeshEditor
 {

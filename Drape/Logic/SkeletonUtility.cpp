@@ -154,9 +154,9 @@ void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vect
 
 	Point clothNeck = cloth[cloth.mNeckIndex].point;
 	Point humanNeck = human[human.mNeckIndex].point;
-	float dx = clothNeck.x() - humanNeck.x();
-	float dy = clothNeck.y() - humanNeck.y();
-	float dz = clothNeck.z() - humanNeck.z();
+	double dx = clothNeck.x() - humanNeck.x();
+	double dy = clothNeck.y() - humanNeck.y();
+	double dz = clothNeck.z() - humanNeck.z();
 	for (int i = 0; i < interpolatePointList.size(); i++)
 	{
 		Point p = interpolatePointList[i];
@@ -194,17 +194,17 @@ float SkeletonUtility::dis( Skeleton& skeleton, Skeleton::vertex_descriptor from
 {
 	Point fromPoint = skeleton[from].point;
 	Point toPoint = skeleton[to].point;
-	float dx = fromPoint.x() - toPoint.x();
-	float dy = fromPoint.y() - toPoint.y();
-	float dz = fromPoint.z() - toPoint.z();
+	double dx = fromPoint.x() - toPoint.x();
+	double dy = fromPoint.y() - toPoint.y();
+	double dz = fromPoint.z() - toPoint.z();
 	return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
 SkeletonUtility::Point SkeletonUtility::interpolate( float from, float to, Point& fromPoint, Point& toPoint, float target )
 {
-	float dx = toPoint.x() - fromPoint.x();
-	float dy = toPoint.y() - fromPoint.y();
-	float dz = toPoint.z() - fromPoint.z();
+	double dx = toPoint.x() - fromPoint.x();
+	double dy = toPoint.y() - fromPoint.y();
+	double dz = toPoint.z() - fromPoint.z();
 
 	float scale = (target - from)/ (to - from);
 
@@ -214,5 +214,40 @@ SkeletonUtility::Point SkeletonUtility::interpolate( float from, float to, Point
 SkeletonUtility::Point SkeletonUtility::pointSub( const Point& a, const Point& b )
 {
 	return Point(a.x() - b.x(), a.y() - b.y(), a.z() - b.z());
+}
+
+void SkeletonUtility::recomputeCorrepspondence( Skeleton& skeleton, Mesh& mesh, int numberOfCorrepondencePoint )
+{
+	std::vector<Point_3> points;
+	for(Mesh::VertexIter it = mesh.vertices_begin(); it != mesh.vertices_end(); it++)
+	{
+		Mesh::Point& openMeshPoint = mesh.point(*it);
+		Point_3 cgalPoint(openMeshPoint.values_[0],openMeshPoint.values_[1],openMeshPoint.values_[2]);
+		points.push_back(cgalPoint);
+	}
+	KNNSHelper knnsHelper(points);		
+	typedef Skeleton::vertex_property_type SkeletonNode;
+	BOOST_FOREACH(Skeleton::vertex_descriptor vd, boost::vertices(skeleton))
+	{
+		SkeletonNode& skeletonNode = skeleton[vd];
+		std::vector<int> lastCors = skeletonNode.correspondanceIndices;
+		skeletonNode.correspondanceIndices.clear();
+		auto skeletonPoint = skeletonNode.point;
+		knnsHelper.kNeighborSearch(Point_3(skeletonPoint.x(),skeletonPoint.y(),skeletonPoint.z()),numberOfCorrepondencePoint);
+		for(KNNSHelper::KNNSHelperIterator it = knnsHelper.begin(); it != knnsHelper.end(); it++)
+		{
+			int neighbor = knnsHelper.getIndex(it);
+			bool correct = false;
+			for (int i = 0; i < lastCors.size(); i++)
+			{
+				if(neighbor == lastCors.at(i))
+				{
+					correct = true;
+					break;
+				}
+			}
+			skeletonNode.correspondanceIndices.push_back(neighbor);
+		}
+	}
 }
 
