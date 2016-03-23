@@ -27,5 +27,7 @@ private slots:
 	void moveCloth();
 
 	void deformCloth();
+
+	void resolvePenetration();
 };
 

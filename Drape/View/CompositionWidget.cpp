@@ -26,6 +26,8 @@ CompositionWidget::CompositionWidget(void)
 	findNeckButton->setText(QObject::tr("Find Neck"));
 	QPushButton* moveClothButton = new QPushButton(buttonGroup);
 	moveClothButton->setText(QObject::tr("Move Cloth"));
+	QPushButton* resolvePenetrationButton = new QPushButton(buttonGroup);
+	resolvePenetrationButton->setText(QObject::tr("Resolve Penetration"));
 	 
 	/* Layout */
 	QHBoxLayout* mainLayout = new QHBoxLayout(this);
@@ -40,7 +42,7 @@ CompositionWidget::CompositionWidget(void)
 
 	QVBoxLayout* viewGroupLayout = new QVBoxLayout(viewGroup);
 	viewGroupLayout->addWidget(meshViewGroup);
-	viewGroupLayout->addWidget(skeletonViewGroup);
+	//viewGroupLayout->addWidget(skeletonViewGroup);
 	QVBoxLayout* meshViewGroupLayout = new QVBoxLayout(meshViewGroup);
 	meshViewGroupLayout->addWidget(mMeshViewer);
 	QVBoxLayout* skeletonViewGroupLayout = new QVBoxLayout(skeletonViewGroup);
@@ -50,10 +52,12 @@ CompositionWidget::CompositionWidget(void)
 	buttonGroupLayout->addWidget(extractSkeletonButton);
 	buttonGroupLayout->addWidget(findNeckButton);
 	buttonGroupLayout->addWidget(moveClothButton);
+	buttonGroupLayout->addWidget(resolvePenetrationButton);
 
 	connect(extractSkeletonButton, SIGNAL(clicked()), mMeshViewer, SLOT(debugOne()));
 	connect(moveClothButton, SIGNAL(clicked()), this, SLOT(moveCloth()));
 	connect(findNeckButton, SIGNAL(clicked()), this, SLOT(deformCloth()));
+	connect(resolvePenetrationButton, SIGNAL(clicked()), this, SLOT(resolvePenetration()));
 
 	//return;
 
@@ -70,10 +74,10 @@ CompositionWidget::CompositionWidget(void)
  	utility.skeletonMatch(globalSkeletonContainer.getSkeletonRef(0), globalSkeletonContainer.getSkeletonRef(1));
 // 
  	mSkeletonViewer->updateSkeleton();		
- 	mMeshViewer->readMesh(QString("dapangziFromOff.obj"));
+// 	mMeshViewer->readMesh(QString("dapangziFromOff.obj"));
 // 	mMeshViewer->updateGL();
- 	mMeshViewer->readMesh(QString("originCloth.obj"));	
-	utility.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),400);
+// 	mMeshViewer->readMesh(QString("originCloth.obj"));	
+//	utility.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),300);
 // 	mMeshViewer->updateGL();
 // 	check_gl_error();
 }
@@ -97,7 +101,7 @@ void CompositionWidget::extractSkeleton()
 void CompositionWidget::moveCloth()
 {
 	SkeletonUtility u;
-	u.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),400);
+	u.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),300);
 
 	/* 计算移动向量 */
 	Kernel::Point_3 humanNeck = globalSkeletonContainer.getSkeletonRef(0)[globalSkeletonContainer.getSkeletonRef(0).mNeckIndex].point;
@@ -137,4 +141,12 @@ MeshViewer* CompositionWidget::meshViewer()
 SkeletonViewer* CompositionWidget::skeletonViewer()
 {
 	return mSkeletonViewer;
+}
+
+void CompositionWidget::resolvePenetration()
+{
+	ClothDeformer d;
+	d.resolvePenetration(globalMeshContatiner.getMeshRef(0),0.3);
+	mMeshViewer->updateScene();
+	mMeshViewer->updateScene();
 }

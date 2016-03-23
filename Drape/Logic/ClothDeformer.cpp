@@ -1,6 +1,8 @@
 #include "MeshContainer.h"
 #include "ClothDeformer.h"
-
+#include "SparseLinearEquationSolver.h"
+#include "KNNSHelper.h"
+#include <vector>
 void ClothDeformer::deformPose( const Skeleton& skeleton )
 {
 	Mesh& cloth = globalMeshContatiner.getMeshRef(1);
@@ -91,5 +93,141 @@ void ClothDeformer::computeDeltaVertices( const Skeleton& skeleton, std::vector<
 			meshPoint += (invertDisList.at(j)/total * delta);
 		}
 		newVertexList[i] = LaplacianMeshEditorVertex(meshPoint.values_[0],meshPoint.values_[1],meshPoint.values_[2]);
+	}
+}
+/*
+x0
+.
+.
+.
+xn
+y0
+.
+.
+.
+yn
+z0
+.
+.
+.
+zn
+*/
+bool ClothDeformer::resolvePenetration( const Mesh& humanMesh, double eps)
+{
+	Mesh& clothMesh = globalMeshContatiner.getMeshRef(1);
+	int clothVerticesCount = clothMesh.n_vertices();
+	std::vector<double> rightB;
+	std::vector< std::vector< std::pair<int, double> > > leftMatrix;//稀疏矩阵，pair为下标和值
+	std::vector<bool> penetrationTest;
+	std::vector<int> nnsHumanVertex;
+	nnsHumanVertex.resize(clothVerticesCount,-1);
+	computeNNSHumanVertex(clothMesh, humanMesh, nnsHumanVertex);
+	computePenetrationVertices(clothMesh, humanMesh,nnsHumanVertex,penetrationTest);
+	/** 构造左矩阵和右向量 **/
+	for(int i = 0; i < clothVerticesCount; i++)
+	{
+		auto curVertex = clothMesh.point(OpenMesh::VertexHandle(i)).values_;
+		/** 一行 **/
+		std::vector< std::pair<int, double> > row;	
+		if(penetrationTest.at(i) == false)
+		{						
+			for (int j = 0; j < 3; j++)
+			{
+				row.clear();
+				row.push_back(std::make_pair(i+j*clothVerticesCount,1));
+				leftMatrix.push_back(row);
+				rightB.push_back(curVertex[j]);
+			}
+		}
+		else
+		{
+			auto curNNSHumanVertexIndex = nnsHumanVertex.at(i);
+			auto curNNSHumanVertex = humanMesh.point(OpenMesh::VertexHandle(curNNSHumanVertexIndex)).values_;
+			auto curNNSHumanNormal = humanMesh.normal(OpenMesh::VertexHandle(curNNSHumanVertexIndex)).values_;
+			row.clear();
+			row.push_back(std::make_pair(i,curNNSHumanNormal[0]));
+			row.push_back(std::make_pair(i+clothVerticesCount,curNNSHumanNormal[1]));
+			row.push_back(std::make_pair(i+2*clothVerticesCount,curNNSHumanNormal[2]));
+			leftMatrix.push_back(row);
+			rightB.push_back(curNNSHumanNormal[0]*curNNSHumanVertex[0]
+			+curNNSHumanNormal[1]*curNNSHumanVertex[1]
+			+curNNSHumanNormal[2]*curNNSHumanVertex[2]
+			-eps);
+		}
+	}
+	std::vector< std::vector<Mesh::VertexHandle> > adjList;
+	computeAdjList(clothMesh,adjList);
+	for (int i = 0; i < clothVerticesCount; i++)
+	{
+
+	}
+	std::vector<double> ret;
+	bool isSuccess = SparseLinearEquationSolver().solve(leftMatrix,rightB, 3*clothVerticesCount, ret);
+	if(isSuccess)
+	{
+		auto it_end = clothMesh.vertices_end();
+		int index = 0;
+		for(Mesh::VertexIter v_it = clothMesh.vertices_begin(); v_it != it_end; v_it++)
+		{
+			Mesh::Point& p = clothMesh.point(*v_it);
+			p.values_[0] = ret[index];
+			p.values_[1] = ret[index+clothVerticesCount];
+			p.values_[2] = ret[index+clothVerticesCount*2];
+		}
+		return true;
+	}
+	else
+		return false;
+}
+
+void ClothDeformer::computeNNSHumanVertex(const Mesh& clothMesh,  const Mesh& humanMesh, std::vector<int>& nnsHumanVertex )
+{
+	nnsHumanVertex.resize(clothMesh.n_vertices());
+	std::vector<Point_3> points;
+	for(Mesh::VertexIter it = humanMesh.vertices_begin(); it != humanMesh.vertices_end(); it++)
+	{
+		Mesh::Point openMeshPoint = humanMesh.point(*it);
+		Point_3 cgalPoint(openMeshPoint.values_[0],openMeshPoint.values_[1],openMeshPoint.values_[2]);
+		points.push_back(cgalPoint);
+	}
+	KNNSHelper knnsHelper(points);	
+	int curClothVertexIndex = 0;
+	for(Mesh::VertexIter it = clothMesh.vertices_begin(); it != clothMesh.vertices_end(); it++)
+	{
+		Mesh::Point openMeshPoint = clothMesh.point(*it);
+		Point_3 cgalPoint(openMeshPoint.values_[0],openMeshPoint.values_[1],openMeshPoint.values_[2]);
+		std::pair<int, double> ret = knnsHelper.singleNeighborSearch(cgalPoint);
+		nnsHumanVertex[curClothVertexIndex++] = ret.first;
+	}
+}
+
+void ClothDeformer::computePenetrationVertices( const Mesh& clothMesh, const Mesh& humanMesh, const std::vector<int>& nnsHumanVertex, std::vector<bool>& penetrationTest )
+{
+	penetrationTest.resize(clothMesh.n_vertices(),false);
+	int curClothVertexIndex = 0;
+	for(Mesh::VertexIter it = clothMesh.vertices_begin(); it != clothMesh.vertices_end(); it++)
+	{
+		Mesh::Point clothPoint = clothMesh.point(*it);
+		auto nnsPointHandle = Mesh::VertexHandle(nnsHumanVertex.at(curClothVertexIndex));
+		Mesh::Point nnsPoint = humanMesh.point(nnsPointHandle);
+		Mesh::Normal nnsNormal = humanMesh.normal(nnsPointHandle);
+		double dotProduct = (clothPoint-nnsPoint)|nnsNormal;
+		if(dotProduct < 0)
+			penetrationTest[curClothVertexIndex] = true;
+		curClothVertexIndex += 1;
+	}
+}
+
+void ClothDeformer::computeAdjList( const Mesh& clothMesh, std::vector< std::vector<Mesh::VertexHandle> >& adjList )
+{
+	int curClothVertexIndex = 0;
+	adjList.resize(clothMesh.n_vertices(), std::vector<Mesh::VertexHandle>());
+	for(Mesh::VertexIter it = clothMesh.vertices_begin(); it != clothMesh.vertices_end(); it++)
+	{
+		for(Mesh::ConstVertexVertexIter vvIt = clothMesh.cvv_begin(*it); vvIt.is_valid(); vvIt++)
+		{
+			adjList[curClothVertexIndex].push_back(*vvIt);
+		}
+		curClothVertexIndex += 1;
 	}
 }

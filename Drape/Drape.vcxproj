@@ -80,6 +80,7 @@
     <ClCompile Include="Logic\SkeletonUtility.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Utility\GLError.cpp" />
+    <ClCompile Include="Utility\SparseLinearEquationSolver.cpp" />
     <ClCompile Include="View\arthurstyle.cpp" />
     <ClCompile Include="View\arthurwidgets.cpp" />
     <ClCompile Include="View\CompositionWidget.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="Logic\KNNSHelper.h" />
     <ClInclude Include="Logic\SkeletonUtility.h" />
     <ClInclude Include="Utility\GLError.h" />
+    <ClInclude Include="Utility\SparseLinearEquationSolver.h" />
     <ClInclude Include="View\arthurstyle.h" />
     <ClInclude Include="View\arthurwidgets.h" />
     <ClInclude Include="View\CompositionWidget.h" />

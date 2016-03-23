@@ -148,6 +148,7 @@ void MeshViewer::initGlew()
 void MeshViewer::drawMesh()
 {
 	int meshCount = mVBOBufferNameList.size();
+	glColor3f(0.5f,0.5f,0.5f);
 	for (int i = 0; i < meshCount; i++)
 	{
 		enum{
@@ -263,7 +264,8 @@ void MeshViewer::debugDraw()
 	std::vector<int> cors = node.correspondanceIndices;
 
 	/** Draw Skeleton **/ 
-	glColor3f(1.0f,1.0f,0);
+	glColor3f(0.0f,1.0f,0);
+	glPointSize(3.0f);
 	glBegin(GL_LINES);
 	BOOST_FOREACH(Skeleton::edge_descriptor e, boost::edges(clothSkeleton))
 	{
@@ -275,7 +277,8 @@ void MeshViewer::debugDraw()
 	glEnd();
 
 	/** Draw Skeleton Nodes **/ 
-	glPointSize(2.0f);
+	glPointSize(5.0f);
+	glColor3f(0.0f, 1.0f, 0);
 	glBegin(GL_POINTS);	
 	BOOST_FOREACH(Skeleton::vertex_descriptor e, boost::vertices(clothSkeleton))
 	{
@@ -286,8 +289,8 @@ void MeshViewer::debugDraw()
 
 
 	/** Draw target point **/
-	glColor3f(1.0f, 0, 1.0f);
-	glPointSize(8.0f);
+	glColor3f(1.0f, 0, 0);
+	glPointSize(10.0f);
 	auto highlightPoint = node.point;
 	glBegin(GL_POINTS);
 	glVertex3f(highlightPoint.x(), highlightPoint.y(), highlightPoint.z());
@@ -296,8 +299,8 @@ void MeshViewer::debugDraw()
 	/** Draw cor points **/
 
 	Mesh& clothMesh = globalMeshContatiner.getMeshRef(1);
-	glPointSize(5.0f);
-	glColor3f(1.0f,0,0);
+	glPointSize(6.0f);
+	glColor3f(1.0f,0,1.0);
 	glBegin(GL_POINTS);
 	for (int i = 0; i < cors.size(); i++)
 	{
@@ -305,8 +308,22 @@ void MeshViewer::debugDraw()
 		glVertex3f(p.values_[0],p.values_[1],p.values_[2]);
 	}	
 	glEnd();
+
+
+	glPointSize(3);
+	glColor3f(0,0.5,1);
+	glBegin(GL_POINTS);
+	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(clothSkeleton))
+	{
+		auto s = clothSkeleton[v].point;
+		auto d = clothSkeleton[v].delta;
+		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
+	}
+	glEnd();
+
 	glPointSize(1.0f);
 	glColor3f(1.0f,1.0f,1.0f);
+
 }
 
 void MeshViewer::debugOne()
