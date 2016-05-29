@@ -3,6 +3,21 @@
 #include "SparseLinearEquationSolver.h"
 #include "KNNSHelper.h"
 #include <vector>
+
+ClothDeformer::ClothDeformer()
+{
+	mPhysicalConstrainer = NULL;
+}
+
+ClothDeformer::~ClothDeformer()
+{
+	if (mPhysicalConstrainer){
+		delete mPhysicalConstrainer;
+		mPhysicalConstrainer = NULL;
+	}
+}
+
+
 void ClothDeformer::deformPose( const Skeleton& skeleton )
 {
 	Mesh& cloth = globalMeshContatiner.getMeshRef(1);
@@ -155,11 +170,45 @@ bool ClothDeformer::resolvePenetration( const Mesh& humanMesh, double eps)
 			-eps);
 		}
 	}
+	/** 加入约束，一个顶点的形变与它周围顶点的平均形变相似**/
 	std::vector< std::vector<Mesh::VertexHandle> > adjList;
 	computeAdjList(clothMesh,adjList);
 	for (int i = 0; i < clothVerticesCount; i++)
 	{
-
+		if(!penetrationTest.at(i))
+			continue;
+		std::vector< std::pair<int, double> > row;
+		std::vector<Mesh::VertexHandle> adjs = adjList.at(i);
+		std::vector<Mesh::VertexHandle> penetratedAdj;
+		for(auto it = adjs.begin(); it != adjs.end(); it++)
+		{
+// 			if(penetrationTest.at(it->idx()))
+// 			{
+// 				penetratedAdj.push_back(*it);
+// 			}
+			penetratedAdj.push_back(*it);
+		}
+		int penetratedAdjSize = penetratedAdj.size();
+		for (int k = 0; k < 3; k++)
+		{
+			row.clear();
+			row.push_back(std::make_pair(i+k*clothVerticesCount,1));			
+			for (int j = 0; j < penetratedAdjSize; j++)
+			{
+				row.push_back(std::make_pair(penetratedAdj.at(j).idx()+k*clothVerticesCount,-1.0/penetratedAdjSize));
+			}
+			leftMatrix.push_back(row);
+		}
+		auto curVertex = clothMesh.point(Mesh::VertexHandle(i)).values_;
+		for (int k = 0; k < 3; k++)
+		{
+			double adjSum = 0;
+			for (int j = 0; j < penetratedAdjSize; j++)
+			{
+				adjSum += clothMesh.point(penetratedAdj.at(j)).values_[k];
+			}
+			rightB.push_back(curVertex[k]-1.0/penetratedAdjSize*adjSum);
+		}
 	}
 	std::vector<double> ret;
 	bool isSuccess = SparseLinearEquationSolver().solve(leftMatrix,rightB, 3*clothVerticesCount, ret);
@@ -173,6 +222,7 @@ bool ClothDeformer::resolvePenetration( const Mesh& humanMesh, double eps)
 			p.values_[0] = ret[index];
 			p.values_[1] = ret[index+clothVerticesCount];
 			p.values_[2] = ret[index+clothVerticesCount*2];
+			index += 1;
 		}
 		return true;
 	}
@@ -230,4 +280,17 @@ void ClothDeformer::computeAdjList( const Mesh& clothMesh, std::vector< std::vec
 		}
 		curClothVertexIndex += 1;
 	}
+}
+
+void ClothDeformer::physicalSimulate(double dt)
+{
+	mPhysicalConstrainer->physicalSimulate(dt);
+	resolvePenetration(globalMeshContatiner.getMeshRef(0),-0.1);
+}
+
+void ClothDeformer::setPhysicalConstrainer( PhysicalConstrainer* physicalConstrainer )
+{
+	if(mPhysicalConstrainer != NULL)
+		delete mPhysicalConstrainer;
+	mPhysicalConstrainer = physicalConstrainer;
 }

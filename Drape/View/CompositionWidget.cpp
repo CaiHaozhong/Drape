@@ -4,7 +4,6 @@
 #include "LaplacianMeshEditor.h"
 #include <cmath>
 #include "GLError.h"
-#include "ClothDeformer.h"
 
 CompositionWidget::CompositionWidget(void)
 {
@@ -23,11 +22,15 @@ CompositionWidget::CompositionWidget(void)
 	QPushButton* extractSkeletonButton = new QPushButton(buttonGroup);
 	extractSkeletonButton->setText(QObject::tr("Extract Skeleton"));	 
 	QPushButton* findNeckButton = new QPushButton(buttonGroup);
-	findNeckButton->setText(QObject::tr("Find Neck"));
+	findNeckButton->setText(QObject::tr("Deform Cloth"));
 	QPushButton* moveClothButton = new QPushButton(buttonGroup);
 	moveClothButton->setText(QObject::tr("Move Cloth"));
 	QPushButton* resolvePenetrationButton = new QPushButton(buttonGroup);
 	resolvePenetrationButton->setText(QObject::tr("Resolve Penetration"));
+	QPushButton* physicalSimuationButton = new QPushButton(buttonGroup);
+	physicalSimuationButton->setText(QObject::tr("PhysicalSimuate"));
+	QPushButton* physicalSimuationStopButton = new QPushButton(buttonGroup);
+	physicalSimuationStopButton->setText(QObject::tr("Stop PhysicalSimuation"));
 	 
 	/* Layout */
 	QHBoxLayout* mainLayout = new QHBoxLayout(this);
@@ -53,11 +56,15 @@ CompositionWidget::CompositionWidget(void)
 	buttonGroupLayout->addWidget(findNeckButton);
 	buttonGroupLayout->addWidget(moveClothButton);
 	buttonGroupLayout->addWidget(resolvePenetrationButton);
+	buttonGroupLayout->addWidget(physicalSimuationButton);
+	buttonGroupLayout->addWidget(physicalSimuationStopButton);
 
 	connect(extractSkeletonButton, SIGNAL(clicked()), mMeshViewer, SLOT(debugOne()));
 	connect(moveClothButton, SIGNAL(clicked()), this, SLOT(moveCloth()));
 	connect(findNeckButton, SIGNAL(clicked()), this, SLOT(deformCloth()));
 	connect(resolvePenetrationButton, SIGNAL(clicked()), this, SLOT(resolvePenetration()));
+	connect(physicalSimuationButton, SIGNAL(clicked()), this, SLOT(startPhysicalSimulation()));
+	connect(physicalSimuationStopButton, SIGNAL(clicked()), this, SLOT(stopPhysicalSimulation()));
 
 	//return;
 
@@ -80,6 +87,8 @@ CompositionWidget::CompositionWidget(void)
 //	utility.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),300);
 // 	mMeshViewer->updateGL();
 // 	check_gl_error();
+
+	mInterval = 1000/25;
 }
 
 
@@ -95,6 +104,9 @@ void CompositionWidget::extractSkeleton()
 		Mesh& mesh = globalMeshContatiner.getMeshRef(i);
 		globalSkeletonContainer.addSkeletonFromMesh(mesh);
 	}
+	/*SkeletonUtility u;
+	u.write(globalSkeletonContainer.getSkeletonRef(0),"human03skeleton");
+	u.write(globalSkeletonContainer.getSkeletonRef(1),"shirt01skeleton");*/
 	mSkeletonViewer->updateSkeleton();
 }
 
@@ -126,9 +138,8 @@ void CompositionWidget::moveCloth()
 }
 
 void CompositionWidget::deformCloth()
-{
-	ClothDeformer d;
-	d.deformPose(globalSkeletonContainer.getSkeletonRef(1));
+{	
+	mClothDeformer.deformPose(globalSkeletonContainer.getSkeletonRef(1));
 	mMeshViewer->updateScene();
 	mMeshViewer->updateScene();
 }
@@ -145,8 +156,30 @@ SkeletonViewer* CompositionWidget::skeletonViewer()
 
 void CompositionWidget::resolvePenetration()
 {
-	ClothDeformer d;
-	d.resolvePenetration(globalMeshContatiner.getMeshRef(0),0.3);
+	mClothDeformer.resolvePenetration(globalMeshContatiner.getMeshRef(0),-0.3);
 	mMeshViewer->updateScene();
 	mMeshViewer->updateScene();
+}
+
+void CompositionWidget::timerEvent( QTimerEvent *event )
+{
+	printf("Tick\n");
+	mClothDeformer.physicalSimulate(mInterval);
+	mMeshViewer->updateScene();
+	mMeshViewer->updateScene();
+}
+
+void CompositionWidget::startPhysicalSimulation()
+{
+	mClothDeformer.setPhysicalConstrainer(new PhysicalConstrainer);
+	mTimerId = this->startTimer(mInterval);
+}
+
+void CompositionWidget::stopPhysicalSimulation()
+{
+	if(mTimerId != 0)
+	{
+		this->killTimer(mTimerId);
+		mTimerId = 0;
+	}
 }

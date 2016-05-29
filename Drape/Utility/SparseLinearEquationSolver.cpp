@@ -4,6 +4,7 @@ bool SparseLinearEquationSolver::solve( const std::vector< std::vector<std::pair
 {
 	int leftMatrixHeight = leftMatrix.size();
 	X.resize(leftMatrixHeight, leftMatrixWidth);
+	printf("Matrix Size: %d,%d\n",leftMatrixHeight, leftMatrixWidth);
 	for (int i = 0; i < leftMatrixHeight; i++)
 	{
 		std::vector<std::pair<int, double> > r = leftMatrix.at(i);
@@ -43,8 +44,8 @@ bool SparseLinearEquationSolver::solve( const std::vector< std::vector<std::pair
 		
 		return false;
 	}
-	ret.resize(leftMatrixHeight);
-	for (int i = 0; i < leftMatrixHeight; i++)
+	ret.resize(leftMatrixWidth);
+	for (int i = 0; i < leftMatrixWidth; i++)
 	{
 		ret[i] = v_p(i);
 	}

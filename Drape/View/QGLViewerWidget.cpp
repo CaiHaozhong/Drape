@@ -145,12 +145,12 @@ QGLViewerWidget::setDefaultMaterial(void)
   GLfloat mat_a[] = {0.1, 0.1, 0.1, 1.0};
   GLfloat mat_d[] = {0.7, 0.7, 0.5, 1.0};
   GLfloat mat_s[] = {1.0, 1.0, 1.0, 1.0};
-  GLfloat shine[] = {120.0};
+  GLfloat shine[] = {50.0};
   
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_a);
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_d);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_s);
-  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shine);
+//  glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_s);
+//  glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shine);
 }
 
 
@@ -166,7 +166,7 @@ QGLViewerWidget::setDefaultLight(void)
   GLfloat col2[] = { 0.8,  0.7,  0.7,  1.0};
   GLfloat col3[] = { 1.0,  1.0,  1.0,  1.0};
  
-  glEnable(GL_LIGHT0);    
+ glEnable(GL_LIGHT0);    
   glLightfv(GL_LIGHT0,GL_POSITION, pos1);
   glLightfv(GL_LIGHT0,GL_DIFFUSE,  col1);
   glLightfv(GL_LIGHT0,GL_SPECULAR, col1);

@@ -3,9 +3,13 @@
 #include "LaplacianMeshEditor.h"
 #include "SkeletonDef.h"
 #include "MeshDef.h"
+#include "PhysicalConstrainer.h"
 class ClothDeformer
 {
 public:
+
+	ClothDeformer();
+	~ClothDeformer();
 	/************************************************************************/
 	/* 其中，输入的参数为衣服的骨骼，已经和网格对齐，并且计算了节点的delta值
 	/* 该函数改变globalMeshContainer中的衣服网格
@@ -14,8 +18,10 @@ public:
 
 	bool resolvePenetration(const Mesh& humanMesh, double eps);
 
-	void physicalSimulate(){/** To do **/}
+	/* A single step */
+	void physicalSimulate(double dt);
 
+	void setPhysicalConstrainer(PhysicalConstrainer* physicalConstrainer);
 private:
 	/** 传入衣服网格未移动的顶点的集合，即原始顶点 **/
 	void computeDeltaVertices( const Skeleton& skeleton, std::vector<LaplacianMeshEditorVertex>& newVertexList);
@@ -28,5 +34,9 @@ private:
 
 	/** 计算每个顶点的邻接顶点 **/
 	void computeAdjList(const Mesh& clothMesh, std::vector< std::vector<Mesh::VertexHandle> >& adjList);
+
+
+
+	PhysicalConstrainer* mPhysicalConstrainer;
 };
 

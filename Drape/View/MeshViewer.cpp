@@ -1,5 +1,6 @@
 #include "MeshViewer.h"
 #include <climits>
+#include <QMouseEvent>
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <QDebug>
@@ -7,12 +8,14 @@
 #include "SkeletonContainer.h"
 MeshViewer::MeshViewer(void)
 {
-	initGlew();			
+	initGlew();
+	mAccumulateWheelTranslation = 0;
 }
 
 MeshViewer::MeshViewer( QWidget* parent ) :QGLViewerWidget(parent)
 {
 	initGlew();	
+	mAccumulateWheelTranslation = 0;
 }
 
 
@@ -30,7 +33,7 @@ void MeshViewer::draw_scene( const std::string& _draw_mode )
 		glDisable(GL_LIGHTING);		
 		glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);		
 		drawMesh();
-		debugDraw();
+		//debugDraw();
 	}
 
 	else if (_draw_mode == "Solid Flat")
@@ -148,9 +151,13 @@ void MeshViewer::initGlew()
 void MeshViewer::drawMesh()
 {
 	int meshCount = mVBOBufferNameList.size();
-	glColor3f(0.5f,0.5f,0.5f);
+	
 	for (int i = 0; i < meshCount; i++)
 	{
+		if(i == 0)
+			glColor3f(0.4f,0.4f,0.4f);
+		else
+			glColor3f(1,1,1);
 		enum{
 			VBO_VERTEX,
 			VBO_NORMAL,
@@ -213,7 +220,10 @@ void MeshViewer::adjustScene()
 
 	// set center and radius
 	/* 设置模型包围盒的中心， radius就是对角线长度的一半 */
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	set_scene_pos( (bbMin+bbMax)*0.5, (bbMin-bbMax).norm()*0.5 );
+	translate(OpenMesh::Vec3f(0,0,mAccumulateWheelTranslation));
 }
 
 void MeshViewer::open_mesh_gui()
@@ -252,8 +262,7 @@ void MeshViewer::updateScene()
 		glBindBuffer(GL_ARRAY_BUFFER,vertexVbo);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 3 * mesh.n_vertices() * 1 , mesh.points(), GL_DYNAMIC_DRAW);
 		adjustScene();
-	}
-
+	}	
 	updateGL();
 }
 
@@ -338,5 +347,12 @@ void MeshViewer::debugOne()
 		curNodeIter = boost::vertices(clothSkeleton).first;
 	}
 	updateGL();
+}
+
+void MeshViewer::wheelEvent( QWheelEvent* events)
+{
+	QGLViewerWidget::wheelEvent(events);
+	float d = -(float)events->delta() / 120.0 * 0.2 * radius();
+	mAccumulateWheelTranslation += d;
 }
 

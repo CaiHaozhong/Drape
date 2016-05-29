@@ -46,6 +46,8 @@ public slots:
 	void updateScene();
 
 	void debugOne();
+protected:
+	void wheelEvent( QWheelEvent* event);
 private:
 
 	void debugDraw();	
@@ -64,6 +66,8 @@ private:
 	void initGlew();
 
 	OpenMesh::Vec3f bbMin, bbMax;
+
+	double mAccumulateWheelTranslation;
 };
 
 /*#undef BUFFER_OFFSET(bytes)*/

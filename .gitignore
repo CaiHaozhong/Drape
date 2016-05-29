@@ -4,6 +4,9 @@
 *.txt
 *.opensdf
 data/
+Model/
+shirt01skeleton
+human03skeleton
 =======
 # Compiled Object files
 *.slo

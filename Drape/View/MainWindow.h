@@ -16,6 +16,7 @@ public:
 
 private slots:
 	void about();
+	void saveCloth();
 
 private:
 	CompositionWidget* mCompositionWidget;

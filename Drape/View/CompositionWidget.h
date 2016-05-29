@@ -4,6 +4,7 @@
 #include "SkeletonViewer.h"
 #include "SkeletonContainer.h"
 #include "MeshContainer.h"
+#include "ClothDeformer.h"
 
 class CompositionWidget : public QWidget
 {
@@ -15,7 +16,7 @@ public:
 private:
 	MeshViewer* mMeshViewer;
 	SkeletonViewer* mSkeletonViewer;
-
+	ClothDeformer mClothDeformer;
 public:
 	MeshViewer* meshViewer();
 	SkeletonViewer* skeletonViewer();
@@ -29,5 +30,14 @@ private slots:
 	void deformCloth();
 
 	void resolvePenetration();
+
+	void startPhysicalSimulation();
+
+	void stopPhysicalSimulation();
+
+protected:
+	void timerEvent(QTimerEvent *event);
+	int mTimerId;
+	int mInterval;
 };
 

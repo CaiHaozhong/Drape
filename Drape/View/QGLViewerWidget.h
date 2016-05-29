@@ -155,14 +155,14 @@ protected:
   virtual void mouseMoveEvent( QMouseEvent* );
   virtual void wheelEvent( QWheelEvent* );
   virtual void keyPressEvent( QKeyEvent* );
-
+  // translate the scene and update modelview matrix
+  void translate(const OpenMesh::Vec3f& _trans);
 private:
    
   // updates projection matrix
   void update_projection_matrix();
 
-  // translate the scene and update modelview matrix
-  void translate(const OpenMesh::Vec3f& _trans);
+
 
   // rotate the scene (around its center) and update modelview matrix
   void rotate(const OpenMesh::Vec3f& _axis, float _angle);

@@ -2,6 +2,7 @@
 #include <QAction>
 #include <QMenu>
 #include "CompositionWidget.h"
+#include "MeshContainer.h"
 MainWindow::MainWindow()
 {
 	mCompositionWidget = new CompositionWidget();
@@ -30,7 +31,8 @@ void MainWindow::createAction()
 	connect(mOpenAct, SIGNAL(triggered()), mCompositionWidget->meshViewer(), SLOT(open_mesh_gui()));
 	mClearAct = new QAction(tr("Clear Mesh"),this);
 	connect(mClearAct, SIGNAL(triggered()), mCompositionWidget->meshViewer(), SLOT(clear_current_mesh()));
-	mSaveAct = new QAction(tr("Save as a Mesh..."),this);
+	mSaveAct = new QAction(tr("Save Cloth..."),this);
+	connect(mSaveAct, SIGNAL(triggered()), this, SLOT(saveCloth()));
 	mExitAct = new QAction(tr("Exit"),this);
 	connect(mExitAct, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -43,4 +45,19 @@ void MainWindow::about()
 {
 	QMessageBox::about(this,tr("About"),
 		tr("This <b>Drape</b> Application is an implementation of CaiHaozhong's Master thesis."));
+}
+
+void MainWindow::saveCloth()
+{
+	Mesh& cloth = globalMeshContatiner.getMeshRef(1);
+	if(OpenMesh::IO::write_mesh(cloth,"newCloth.obj"))
+	{
+		QMessageBox::information(this,tr("DRAPE"),
+			tr("Write to <b>newCloth.obj</b> successfully!"),QMessageBox::Yes);
+	}
+	else
+	{
+		QMessageBox::critical(this,tr("DRAPE"),
+			tr("Write to <b>newCloth.obj</b> fail!"),QMessageBox::Yes);
+	}	
 }
