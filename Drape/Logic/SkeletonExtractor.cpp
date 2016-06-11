@@ -10,7 +10,7 @@ SkeletonExtractor::~SkeletonExtractor(void)
 {
 }
 
-void SkeletonExtractor::extract( const Mesh& mesh, Skeleton& skeleton )
+void SkeletonExtractor::extract( const Mesh& mesh, Skeletonization::Skeleton& skeleton )
 {
 	Triangle_mesh triangle_mesh;
 	convertToSurfaceMesh(mesh, triangle_mesh);

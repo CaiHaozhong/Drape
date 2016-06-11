@@ -63,7 +63,7 @@ void MeshViewer::draw_scene( const std::string& _draw_mode )
 
 void MeshViewer::readMesh( const QString& fileName )
 {
-	curNodeIter = boost::vertices(globalSkeletonContainer.getSkeletonRef(1)).first;
+//	curNodeIter = boost::vertices(globalSkeletonContainer.getSkeletonRef(1)).first;
 /*	qDebug() << (const char*)fileName.toAscii();*/
 	bool isSuccess = globalMeshContatiner.addMeshFromFile((const char*)fileName.toAscii());
 

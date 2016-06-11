@@ -12,35 +12,35 @@ SkeletonUtility::~SkeletonUtility()
 
 void SkeletonUtility::write( const Skeleton& skeleton, const char* file )
 {
+	size_t nodeCount = skeleton.nodeCount();
+	size_t edgeCount = skeleton.edgeCount();
+	typedef SkeletonNode::Point Point;
 	std::ofstream out(file);
-	out << boost::num_vertices(skeleton) << std::endl;
-	BOOST_FOREACH(Skeleton::vertex_descriptor vd, boost::vertices(skeleton))
-	{
-		auto point = skeleton[vd].point;
-		auto delta = skeleton[vd].delta;
-		out << point.x() << ' ' << point.y() << ' ' << point.z() 
-			<< " delta: "
-			<< delta.x() << ' ' << delta.y() << ' ' << delta.z() 
-			<< std::endl;		
-	}
-
-	out << boost::num_edges(skeleton) << std::endl;
-	BOOST_FOREACH(Skeleton::edge_descriptor ed, boost::edges(skeleton))
-	{
-		out << boost::source(ed,skeleton) << ' ' << boost::target(ed,skeleton) << std::endl;
-	}
-
-	out << "correspondance" << std::endl;
-
-	BOOST_FOREACH(Skeleton::vertex_descriptor vd, boost::vertices(skeleton))
-	{
-		auto verticesList = skeleton[vd].vertices;
-		out << verticesList.size() << ' ';
-		for (int i = 0; i < verticesList.size(); i++)
+	out << nodeCount << "\n";
+	for(size_t i = 0; i < nodeCount; i++){
+		SkeletonNode* node = skeleton.nodeAt(i);
+		float* point = node->point.values_;
+		float* delta = node->delta.values_;
+		Skeleton::IndexList& correspondanceList = node->correspondanceIndices;
+		size_t correspondanceCount = correspondanceList.size();
+		out << "point "
+			<< point[0] << ' ' << point[1] << ' ' << point[2] 
+			<< " delta "
+			<< delta[0] << ' ' << delta[1] << ' ' << delta[2]
+			<< " correspondance "	
+		    << correspondanceCount << ' ';
+		for (size_t j = 0; j < correspondanceCount; j++)
 		{
-			out << verticesList.at(i) << ' ';
+			out << correspondanceList.at(j) << ' ';
 		}
-		out << std::endl;
+		out << "\n";	
+	}
+
+	out << edgeCount << "\n";
+
+	for(size_t i = 0; i < edgeCount; i++){
+		SkeletonEdge* edge = skeleton.edgeAt(i);
+		out << edge->sourceVertex << ' ' << edge->targetVertex << "\n";
 	}
 
 	out.close();
@@ -48,61 +48,32 @@ void SkeletonUtility::write( const Skeleton& skeleton, const char* file )
 
 void SkeletonUtility::read( Skeleton& skeleton, const char* file )
 {
+	skeleton.clear();
 	std::ifstream input(file);
-	int numVertices, numEdges;
-	input >> numVertices;
-
-	typedef Skeleton::vertex_property_type Node;
-	std::vector<Node> nodeList;
-	for (int i = 0; i < numVertices; i++)
-	{			
-		float x,y,z;
-		input >> x >> y >> z;
-		Node node;
-		typedef Kernel::Point_3 SurfacePoint;
-		SurfacePoint p(x,y,z);
-		node.point = p;
-		nodeList.push_back(node);
-	}
-
-	input >> numEdges;
-	typedef std::pair<Skeleton::vertex_descriptor, Skeleton::vertex_descriptor> Edge;
-	std::vector<Edge> edgeList;		
-	for (int i = 0; i < numEdges; i++)
-	{
-		Edge edge;
-		input >> edge.first >> edge.second;
-		edgeList.push_back(edge);
-	}
-
+	int numVertices, numEdges, correspondance, correspondanceCount;
 	std::string ignore;
-	input >> ignore;
-
-	for (int i = 0; i < numVertices; i++)
-	{
-		int size;
-		int correspondance;
-		std::string str;
-		input >> size;
-		for (int j = 0; j < size; j++)
-		{
-			input >> str;
-			std::string numstring = str.substr(1);
-			correspondance = atoi(numstring.c_str());
-			nodeList[i].correspondanceIndices.push_back(correspondance);
+	input >> numVertices;
+	while(numVertices--){
+		SkeletonNode* node = new SkeletonNode;
+		input >> ignore
+			  >> node->point.values_[0] >> node->point.values_[1] >> node->point.values_[2]
+		      >> ignore
+			  >> node->delta.values_[0] >> node->delta.values_[1] >> node->delta.values_[2]
+			  >> ignore
+		      >> correspondanceCount;
+		while (correspondanceCount--){
+			input >> correspondance;
+			node->correspondanceIndices.push_back(correspondance);
 		}
+		skeleton.addNode(node);
+	}
+	input >> numEdges;
+	while(numEdges--){
+		SkeletonEdge* edge = new SkeletonEdge;
+		input >> edge->sourceVertex >> edge->targetVertex;
+		skeleton.addEdge(edge);
 	}
 	input.close();
-	for (int i = 0; i < numVertices; i++)
-	{
-		boost::add_vertex(nodeList.at(i),skeleton);
-	}
-
-	for (int i = 0; i < numEdges; i++)
-	{
-		Edge edge = edgeList.at(i);
-		boost::add_edge(edge.first, edge.second, skeleton);
-	}
 }
 
 void SkeletonUtility::readIntoContainer( const char* file )
@@ -250,4 +221,3 @@ void SkeletonUtility::recomputeCorrepspondence( Skeleton& skeleton, Mesh& mesh, 
 		}
 	}
 }
-

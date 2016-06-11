@@ -7,7 +7,6 @@
 class SkeletonUtility
 {
 public:
-	typedef Kernel::Point_3 Point;
 
 	SkeletonUtility();
 	~SkeletonUtility();

@@ -34,14 +34,12 @@ void SkeletonViewer::updateSkeleton()
 	for(int i = 0; i < globalSkeletonContainer.size(); i++)
 	{
 		Skeleton& skeleton = globalSkeletonContainer.getSkeletonRef(i);
-
-		BOOST_FOREACH(Skeleton_vertex v, boost::vertices(skeleton))
-		{
-			auto x = skeleton[v].point.x();
-			auto y = skeleton[v].point.y();
-			auto z = skeleton[v].point.z();
-			bbMin.minimize( OpenMesh::Vec3f(x,y,z) );
-			bbMax.maximize( OpenMesh::Vec3f(x,y,z) );
+		Skeleton::NodeList nodes = skeleton.getNodeList();
+		for(size_t j = 0; j < nodes.size(); j++)
+		{			
+			SkeletonNode* n = nodes.at(i);
+			bbMin.minimize( n->point );
+			bbMax.maximize( n->point );
 		}
 	}
 
@@ -56,30 +54,35 @@ void SkeletonViewer::drawSkeleton( const Skeleton& skeleton )
 {
 	glColor3f(1.0f,1.0f,1.0f);
 	glBegin(GL_LINES);
-	BOOST_FOREACH(Skeleton_edge e, boost::edges(skeleton))
-	{
-		auto s = skeleton[boost::source(e, skeleton)].point;
-		auto t = skeleton[boost::target(e, skeleton)].point;
-		glVertex3f(s.x(), s.y(), s.z());
-		glVertex3f(t.x(), t.y(), t.z());
+	Skeleton::EdgeList edgeList = skeleton.getEdgeList();
+	size_t edgeCount = edgeList.size();
+	typedef SkeletonNode::Point Point;
+	for(size_t i = 0; i < edgeCount; i++){
+		SkeletonEdge* edge = edgeList.at(i);
+		Point source = skeleton.nodeAt(edge->sourceVertex)->point;
+		Point target = skeleton.nodeAt(edge->targetVertex)->point;
+		glVertex3fv(source.values_);
+		glVertex3fv(target.values_);
 	}
 	glEnd();
 
 
 	glPointSize(3);
+	Skeleton::NodeList nodeList = skeleton.getNodeList();
+	size_t nodeCount = nodeList.size();
 	glBegin(GL_POINTS);
-	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(skeleton))
-	{
-		auto s = skeleton[v].point;
-		glVertex3f(s.x(), s.y(), s.z());
+	for(size_t i = 0; i < nodeCount; i++){
+		Point p = skeleton.nodeAt(i)->point;
+		glVertex3fv(p.values_);
 	}
 	glEnd();
-	glPointSize(5);
-	glPointSize(10);
-	Kernel::Point_3 point = skeleton[skeleton.mNeckIndex].point;
-	glBegin(GL_POINTS);
-	glVertex3f(point.x(), point.y(), point.z());
-	glEnd();
+
+// 	glPointSize(5);
+// 	glPointSize(10);
+// 	Kernel::Point_3 point = skeleton[skeleton.mNeckIndex].point;
+// 	glBegin(GL_POINTS);
+// 	glVertex3f(point.x(), point.y(), point.z());
+// 	glEnd();
 	
 // 	glPointSize(8.0);
 // 	glColor3f(1.0f, 0, 0);
@@ -101,15 +104,15 @@ void SkeletonViewer::drawSkeleton( const Skeleton& skeleton )
 // 	}
 // 	glEnd();
 
-	glPointSize(2);
-	glBegin(GL_POINTS);
-	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(skeleton))
-	{
-		auto s = skeleton[v].point;
-		auto d = skeleton[v].delta;
-		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
-	}
-	glEnd();
+// 	glPointSize(2);
+// 	glBegin(GL_POINTS);
+// 	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(skeleton))
+// 	{
+// 		auto s = skeleton[v].point;
+// 		auto d = skeleton[v].delta;
+// 		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
+// 	}
+// 	glEnd();
 
 	glPointSize(1.0);
 }

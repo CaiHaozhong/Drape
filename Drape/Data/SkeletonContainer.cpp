@@ -1,25 +1,23 @@
 #include "SkeletonContainer.h"
 #include "SkeletonUtility.h"
+#include "SkeletonPipeLine.h"
 
 
-SkeletonContainer::SkeletonContainer(void)
-{
-}
+SkeletonContainer::SkeletonContainer(void){}
 
 
-SkeletonContainer::~SkeletonContainer(void)
-{
-}
+SkeletonContainer::~SkeletonContainer(void){}
 
 bool SkeletonContainer::addSkeletonFromMesh( const Mesh& mesh )
 {
-	mSkeletonList.push_back(Skeleton());
-	Skeleton &skeleton = mSkeletonList[mSkeletonList.size()-1];
+	Skeletonization::Skeleton cgalSkeleton;	
 	SkeletonExtractor extractor;
-	extractor.extract(mesh, skeleton);
-	SkeletonUtility skeletonUtility;
-	skeletonUtility.write(skeleton,"skeleton.txt");
-	skeleton.findNeck();
+	extractor.extract(mesh, cgalSkeleton);
+	Skeleton* skeleton = Skeleton::fromCGALSkeleton(cgalSkeleton);
+	SkeletonPipeLine pipeline(skeleton);
+	pipeline.excute();
+	mSkeletonList.push_back(*skeleton);
+	delete skeleton;
 	return true;
 }
 

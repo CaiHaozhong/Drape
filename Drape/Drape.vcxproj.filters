@@ -99,6 +99,15 @@
     <ClCompile Include="Logic\PhysicalConstrainer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Logic\Skeleton\SkeletonPipeLine.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic\Skeleton\SkeletonProcessor.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic\Skeleton\IsolatedPointEliminator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Data\MeshContainer.h">
@@ -156,6 +165,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Logic\PhysicalConstrainer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\Skeleton\SkeletonPipeLine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\Skeleton\SkeletonProcessor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic\Skeleton\IsolatedPointEliminator.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

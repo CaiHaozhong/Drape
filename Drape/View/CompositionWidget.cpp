@@ -45,7 +45,7 @@ CompositionWidget::CompositionWidget(void)
 
 	QVBoxLayout* viewGroupLayout = new QVBoxLayout(viewGroup);
 	viewGroupLayout->addWidget(meshViewGroup);
-	//viewGroupLayout->addWidget(skeletonViewGroup);
+	viewGroupLayout->addWidget(skeletonViewGroup);
 	QVBoxLayout* meshViewGroupLayout = new QVBoxLayout(meshViewGroup);
 	meshViewGroupLayout->addWidget(mMeshViewer);
 	QVBoxLayout* skeletonViewGroupLayout = new QVBoxLayout(skeletonViewGroup);
@@ -59,34 +59,26 @@ CompositionWidget::CompositionWidget(void)
 	buttonGroupLayout->addWidget(physicalSimuationButton);
 	buttonGroupLayout->addWidget(physicalSimuationStopButton);
 
-	connect(extractSkeletonButton, SIGNAL(clicked()), mMeshViewer, SLOT(debugOne()));
+	connect(extractSkeletonButton, SIGNAL(clicked()), this, SLOT(extractSkeleton()));
 	connect(moveClothButton, SIGNAL(clicked()), this, SLOT(moveCloth()));
 	connect(findNeckButton, SIGNAL(clicked()), this, SLOT(deformCloth()));
 	connect(resolvePenetrationButton, SIGNAL(clicked()), this, SLOT(resolvePenetration()));
 	connect(physicalSimuationButton, SIGNAL(clicked()), this, SLOT(startPhysicalSimulation()));
 	connect(physicalSimuationStopButton, SIGNAL(clicked()), this, SLOT(stopPhysicalSimulation()));
 
-	//return;
-
-	SkeletonUtility utility;
-	utility.readIntoContainer("humanskeleton.txt");
-	utility.readIntoContainer("clothskeleton.txt");
-
-	for (int i = 0; i < globalSkeletonContainer.size(); i++)
-	{
-		Skeleton& skeleton = globalSkeletonContainer.getSkeletonRef(i);
-		skeleton.findNeck();
-		skeleton.findHand();
-	}
- 	utility.skeletonMatch(globalSkeletonContainer.getSkeletonRef(0), globalSkeletonContainer.getSkeletonRef(1));
+//	SkeletonUtility utility;
+//	utility.readIntoContainer("humanskeleton.txt");
+//	utility.readIntoContainer("clothskeleton.txt");
+//
+// 	for (int i = 0; i < globalSkeletonContainer.size(); i++)
+// 	{
+// 		Skeleton& skeleton = globalSkeletonContainer.getSkeletonRef(i);
+// 		skeleton.findNeck();
+// 		skeleton.findHand();
+// 	}
+//  	utility.skeletonMatch(globalSkeletonContainer.getSkeletonRef(0), globalSkeletonContainer.getSkeletonRef(1));
 // 
- 	mSkeletonViewer->updateSkeleton();		
-// 	mMeshViewer->readMesh(QString("dapangziFromOff.obj"));
-// 	mMeshViewer->updateGL();
-// 	mMeshViewer->readMesh(QString("originCloth.obj"));	
-//	utility.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),300);
-// 	mMeshViewer->updateGL();
-// 	check_gl_error();
+//  	mSkeletonViewer->updateSkeleton();		
 
 	mInterval = 1000/25;
 }

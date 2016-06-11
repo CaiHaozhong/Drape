@@ -61,7 +61,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>Utility;Logic;View;Data;D:\Qt\4.8.6\include;D:\Qt\4.8.6\include\QtGui;D:\Qt\4.8.6\include\QtOpenGL;D:\Qt\4.8.6\include\QtCore;D:\boost\boost_1_55_0;E:\CG\CGAL\build\include;E:\CG\CGAL\include;E:\CG\CGAL\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Logic\Skeleton;Utility;Logic;View;Data;D:\Qt\4.8.6\include;D:\Qt\4.8.6\include\QtGui;D:\Qt\4.8.6\include\QtOpenGL;D:\Qt\4.8.6\include\QtCore;D:\boost\boost_1_55_0;E:\CG\CGAL\build\include;E:\CG\CGAL\include;E:\CG\CGAL\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;NOMINMAX;OM_STATIC_BUILD;_CRT_SECURE_NO_WARNINGS;CGAL_EIGEN3_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -74,11 +74,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Logic\Skeleton\IsolatedPointEliminator.cpp" />
     <ClCompile Include="Logic\ClothDeformer.cpp" />
     <ClCompile Include="Logic\LaplacianMeshEditor.cpp" />
     <ClCompile Include="Logic\KNNSHelper.cpp" />
     <ClCompile Include="Logic\PhysicalConstrainer.cpp" />
     <ClCompile Include="Logic\SkeletonUtility.cpp" />
+    <ClCompile Include="Logic\Skeleton\SkeletonPipeLine.cpp" />
+    <ClCompile Include="Logic\Skeleton\SkeletonProcessor.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="Utility\GLError.cpp" />
     <ClCompile Include="Utility\SparseLinearEquationSolver.cpp" />
@@ -104,11 +107,14 @@
     <ClCompile Include="Logic\SkeletonExtractor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Logic\Skeleton\IsolatedPointEliminator.h" />
     <ClInclude Include="Logic\ClothDeformer.h" />
     <ClInclude Include="Logic\LaplacianMeshEditor.h" />
     <ClInclude Include="Logic\KNNSHelper.h" />
     <ClInclude Include="Logic\PhysicalConstrainer.h" />
     <ClInclude Include="Logic\SkeletonUtility.h" />
+    <ClInclude Include="Logic\Skeleton\SkeletonPipeLine.h" />
+    <ClInclude Include="Logic\Skeleton\SkeletonProcessor.h" />
     <ClInclude Include="Utility\GLError.h" />
     <ClInclude Include="Utility\SparseLinearEquationSolver.h" />
     <ClInclude Include="View\arthurstyle.h" />
