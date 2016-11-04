@@ -61,7 +61,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>Logic\Skeleton;Utility;Logic;View;Data;D:\Qt\4.8.6\include;D:\Qt\4.8.6\include\QtGui;D:\Qt\4.8.6\include\QtOpenGL;D:\Qt\4.8.6\include\QtCore;D:\boost\boost_1_55_0;E:\CG\CGAL\build\include;E:\CG\CGAL\include;E:\CG\CGAL\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Logic\Skeleton;Utility;Logic;View;Data;D:\Qt\4.8.6\include;D:\Qt\4.8.6\include\QtGui;D:\Qt\4.8.6\include\QtOpenGL;D:\Qt\4.8.6\include\QtCore;C:\local\boost_1_59_0;C:\dev\CGAL-4.9\build\include;C:\dev\CGAL-4.9\include;C:\dev\CGAL-4.9\auxiliary\gmp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;NOMINMAX;OM_STATIC_BUILD;_CRT_SECURE_NO_WARNINGS;CGAL_EIGEN3_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -69,8 +69,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>E:\CG\Exercise\Drape\libs;D:\Qt\4.8.6\lib;E:\CG\CGAL\build\lib;D:\boost\lib;E:\CG\CGAL\auxiliary\gmp\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenMeshCore.lib;OpenMeshTools.lib;QtOpenGL4.lib;QtGui4.lib;QtCore4.lib;qtmain.lib;glu32.lib;opengl32.lib;glew32.lib;libgmp-10.lib;libmpfr-4.lib;libboost_thread-vc110-mt-1_55.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)libs;D:\Qt\4.8.6\lib;C:\dev\CGAL-4.9\build\lib;C:\local\boost_1_59_0\lib32-msvc-11.0;C:\dev\CGAL-4.9\auxiliary\gmp\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenMeshCore.lib;OpenMeshTools.lib;QtOpenGL4.lib;QtGui4.lib;QtCore4.lib;qtmain.lib;glu32.lib;opengl32.lib;glew32.lib;libgmp-10.lib;libmpfr-4.lib;libboost_thread-vc110-mt-1_59.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 #include <climits>
 #include <OpenMesh/Core/Geometry/VectorT.hh>
 #include "ModelType.h"
-#include "SkeletonNeckHunter.h"
+//#include "SkeletonNeckHunter.h" 和SkeletonNeckHunter交叉引用了
 
 typedef CGAL::Simple_cartesian<double>                        Kernel;
 typedef CGAL::Surface_mesh<Kernel::Point_3>                   Triangle_mesh;
@@ -61,7 +61,7 @@ public:
 		BOOST_FOREACH(vertex_descriptor v, boost::vertices(skeleton)){
 			SkeletonNode* node = new SkeletonNode;
 			auto skeletonizationPoint = skeleton[v].point;
-			node->point = SkeletonNode::Point(skeletonizationPoint.x, skeletonizationPoint.y, skeletonizationPoint.z);
+			node->point = SkeletonNode::Point(skeletonizationPoint.x(), skeletonizationPoint.y(), skeletonizationPoint.z());
 			node->correspondanceIndices = skeleton[v].correspondanceIndices;
 			ret->addNode(node);
 		}

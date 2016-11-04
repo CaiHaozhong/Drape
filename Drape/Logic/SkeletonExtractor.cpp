@@ -45,7 +45,8 @@ void SkeletonExtractor::extract( const Mesh& mesh, Skeletonization::Skeleton& sk
 // 	BOOST_FOREACH(Skeleton_vertex v, vertices(skeleton))
 // 		BOOST_FOREACH(vertex_descriptor vd, skeleton[v].vertices)
 // 		output << "2 " << skeleton[v].point << "  " << boost::get(CGAL::vertex_point, triangle_mesh, vd)  << "\n";
-// 	output.close();
+// 	output.close();
+
 }
 
 void SkeletonExtractor::convertToSurfaceMesh( const Mesh& mesh, Triangle_mesh& triangle_mesh )

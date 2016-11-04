@@ -268,85 +268,85 @@ void MeshViewer::updateScene()
 
 void MeshViewer::debugDraw()
 {
-	Skeleton clothSkeleton = globalSkeletonContainer.getSkeletonRef(1);
-	Skeleton::vertex_property_type node = clothSkeleton[*curNodeIter];
-	std::vector<int> cors = node.correspondanceIndices;
-
-	/** Draw Skeleton **/ 
-	glColor3f(0.0f,1.0f,0);
-	glPointSize(3.0f);
-	glBegin(GL_LINES);
-	BOOST_FOREACH(Skeleton::edge_descriptor e, boost::edges(clothSkeleton))
-	{
-		auto s = clothSkeleton[boost::source(e, clothSkeleton)].point;
-		auto t = clothSkeleton[boost::target(e, clothSkeleton)].point;
-		glVertex3f(s.x(), s.y(), s.z());
-		glVertex3f(t.x(), t.y(), t.z());
-	}
-	glEnd();
-
-	/** Draw Skeleton Nodes **/ 
-	glPointSize(5.0f);
-	glColor3f(0.0f, 1.0f, 0);
-	glBegin(GL_POINTS);	
-	BOOST_FOREACH(Skeleton::vertex_descriptor e, boost::vertices(clothSkeleton))
-	{
-		auto p = clothSkeleton[e].point;
-		glVertex3f(p.x(), p.y(), p.z());
-	}
-	glEnd();
-
-
-	/** Draw target point **/
-	glColor3f(1.0f, 0, 0);
-	glPointSize(10.0f);
-	auto highlightPoint = node.point;
-	glBegin(GL_POINTS);
-	glVertex3f(highlightPoint.x(), highlightPoint.y(), highlightPoint.z());
-	glEnd();
-
-	/** Draw cor points **/
-
-	Mesh& clothMesh = globalMeshContatiner.getMeshRef(1);
-	glPointSize(6.0f);
-	glColor3f(1.0f,0,1.0);
-	glBegin(GL_POINTS);
-	for (int i = 0; i < cors.size(); i++)
-	{
-		auto p = clothMesh.point(OpenMesh::ArrayKernel::VertexHandle(cors.at(i)));
-		glVertex3f(p.values_[0],p.values_[1],p.values_[2]);
-	}	
-	glEnd();
-
-
-	glPointSize(3);
-	glColor3f(0,0.5,1);
-	glBegin(GL_POINTS);
-	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(clothSkeleton))
-	{
-		auto s = clothSkeleton[v].point;
-		auto d = clothSkeleton[v].delta;
-		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
-	}
-	glEnd();
-
-	glPointSize(1.0f);
-	glColor3f(1.0f,1.0f,1.0f);
+// 	Skeleton clothSkeleton = globalSkeletonContainer.getSkeletonRef(1);
+// 	Skeleton::vertex_property_type node = clothSkeleton[*curNodeIter];
+// 	std::vector<int> cors = node.correspondanceIndices;
+// 
+// 	/** Draw Skeleton **/ 
+// 	glColor3f(0.0f,1.0f,0);
+// 	glPointSize(3.0f);
+// 	glBegin(GL_LINES);
+// 	BOOST_FOREACH(Skeleton::edge_descriptor e, boost::edges(clothSkeleton))
+// 	{
+// 		auto s = clothSkeleton[boost::source(e, clothSkeleton)].point;
+// 		auto t = clothSkeleton[boost::target(e, clothSkeleton)].point;
+// 		glVertex3f(s.x(), s.y(), s.z());
+// 		glVertex3f(t.x(), t.y(), t.z());
+// 	}
+// 	glEnd();
+// 
+// 	/** Draw Skeleton Nodes **/ 
+// 	glPointSize(5.0f);
+// 	glColor3f(0.0f, 1.0f, 0);
+// 	glBegin(GL_POINTS);	
+// 	BOOST_FOREACH(Skeleton::vertex_descriptor e, boost::vertices(clothSkeleton))
+// 	{
+// 		auto p = clothSkeleton[e].point;
+// 		glVertex3f(p.x(), p.y(), p.z());
+// 	}
+// 	glEnd();
+// 
+// 
+// 	/** Draw target point **/
+// 	glColor3f(1.0f, 0, 0);
+// 	glPointSize(10.0f);
+// 	auto highlightPoint = node.point;
+// 	glBegin(GL_POINTS);
+// 	glVertex3f(highlightPoint.x(), highlightPoint.y(), highlightPoint.z());
+// 	glEnd();
+// 
+// 	/** Draw cor points **/
+// 
+// 	Mesh& clothMesh = globalMeshContatiner.getMeshRef(1);
+// 	glPointSize(6.0f);
+// 	glColor3f(1.0f,0,1.0);
+// 	glBegin(GL_POINTS);
+// 	for (int i = 0; i < cors.size(); i++)
+// 	{
+// 		auto p = clothMesh.point(OpenMesh::ArrayKernel::VertexHandle(cors.at(i)));
+// 		glVertex3f(p.values_[0],p.values_[1],p.values_[2]);
+// 	}	
+// 	glEnd();
+// 
+// 
+// 	glPointSize(3);
+// 	glColor3f(0,0.5,1);
+// 	glBegin(GL_POINTS);
+// 	BOOST_FOREACH(Skeleton_vertex v, boost::vertices(clothSkeleton))
+// 	{
+// 		auto s = clothSkeleton[v].point;
+// 		auto d = clothSkeleton[v].delta;
+// 		glVertex3f(s.x() + d.x(), s.y() + d.y(), s.z() + d.z());
+// 	}
+// 	glEnd();
+// 
+// 	glPointSize(1.0f);
+// 	glColor3f(1.0f,1.0f,1.0f);
 
 }
 
 void MeshViewer::debugOne()
 {
-	Skeleton clothSkeleton = globalSkeletonContainer.getSkeletonRef(1);
-	if (curNodeIter < boost::vertices(clothSkeleton).second)
-	{
-		curNodeIter++;
-	}
-	else
-	{
-		curNodeIter = boost::vertices(clothSkeleton).first;
-	}
-	updateGL();
+// 	Skeleton clothSkeleton = globalSkeletonContainer.getSkeletonRef(1);
+// 	if (curNodeIter < boost::vertices(clothSkeleton).second)
+// 	{
+// 		curNodeIter++;
+// 	}
+// 	else
+// 	{
+// 		curNodeIter = boost::vertices(clothSkeleton).first;
+// 	}
+// 	updateGL();
 }
 
 void MeshViewer::wheelEvent( QWheelEvent* events)

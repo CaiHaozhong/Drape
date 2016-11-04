@@ -69,14 +69,12 @@ void ClothDeformer::deformPose( const Skeleton& skeleton )
 void ClothDeformer::computeDeltaVertices( const Skeleton& skeleton, std::vector<LaplacianMeshEditorVertex>& newVertexList )
 {
 	int meshVertiecsCount = newVertexList.size();
-	typedef Skeleton::vertex_descriptor SkeletonNodeIndex;
-	typedef Skeleton::vertex_property_type SkeletonNode;
-	std::vector< std::vector<SkeletonNodeIndex> > vertexHasNodes;
+	std::vector< std::vector<size_t> > vertexHasNodes;
 	vertexHasNodes.resize(meshVertiecsCount);
-	BOOST_FOREACH(SkeletonNodeIndex vd, boost::vertices(skeleton))
+	for(size_t vd = 0; vd < skeleton.nodeCount(); vd++)
 	{
-		SkeletonNode node = skeleton[vd];
-		std::vector<int> correspondences = node.correspondanceIndices;
+		SkeletonNode* node = skeleton.nodeAt(vd);
+		std::vector<size_t> correspondences = node->correspondanceIndices;
 		for (int i = 0; i < correspondences.size(); i++)
 		{
 			vertexHasNodes[correspondences.at(i)].push_back(vd);
@@ -86,13 +84,13 @@ void ClothDeformer::computeDeltaVertices( const Skeleton& skeleton, std::vector<
 	for (int i = 0; i < meshVertiecsCount; i++)
 	{
 		OpenMesh::Vec3d meshPoint = newVertexList.at(i).toOpenMeshVector();
-		std::vector<SkeletonNodeIndex>& nodes = vertexHasNodes[i];		
+		std::vector<size_t>& nodes = vertexHasNodes[i];		
 		std::vector<double> invertDisList;/** ¾àÀëµÄµ¹Êý **/
 		double total = 0;
 		for (int j = 0; j < nodes.size(); j++)
 		{
-			auto nodePoint = skeleton[nodes.at(j)].point;			
-			OpenMesh::Vec3d v(nodePoint.x(), nodePoint.y(), nodePoint.z());			
+			auto nodePoint = skeleton.nodeAt(nodes.at(j))->point;			
+			OpenMesh::Vec3d v(nodePoint.values_[0], nodePoint.values_[1], nodePoint.values_[2]);			
 			double invertDis = 1.0/(v - meshPoint).length();
 // 			double dx = nodePoint.x() - meshPoint.x;
 // 			double dy = nodePoint.y() - meshPoint.y;
@@ -103,8 +101,8 @@ void ClothDeformer::computeDeltaVertices( const Skeleton& skeleton, std::vector<
 		}		
 		for (int j = 0; j < nodes.size(); j++)
 		{
-			auto _delta = skeleton[nodes.at(j)].delta;
-			OpenMesh::Vec3d delta(_delta.x(), _delta.y(), _delta.z());
+			auto _delta = skeleton.nodeAt(nodes.at(j))->delta;
+			OpenMesh::Vec3d delta(_delta.values_[0], _delta.values_[1], _delta.values_[2]);
 			meshPoint += (invertDisList.at(j)/total * delta);
 		}
 		newVertexList[i] = LaplacianMeshEditorVertex(meshPoint.values_[0],meshPoint.values_[1],meshPoint.values_[2]);

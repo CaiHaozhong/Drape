@@ -85,17 +85,18 @@ void SkeletonUtility::readIntoContainer( const char* file )
 
 void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth )
 {
-	std::vector<Skeleton::vertex_descriptor>& humanLeftHandVertices = human.getLeftHandVerticesRef();
-	std::vector<Skeleton::vertex_descriptor>& clothLeftHandVertices = cloth.getLeftHandVerticesRef();
+	std::vector<size_t>& humanLeftHandVertices = human.getLeftHandVerticesRef();
+	std::vector<size_t>& clothLeftHandVertices = cloth.getLeftHandVerticesRef();
 	skeletonMatch(human, cloth, humanLeftHandVertices, clothLeftHandVertices);
 
-	std::vector<Skeleton::vertex_descriptor>& humanRightHandVertices = human.getRightHandVerticesRef();
-	std::vector<Skeleton::vertex_descriptor>& clothRightHandVertices = cloth.getRightHandVerticesRef();
+	std::vector<size_t>& humanRightHandVertices = human.getRightHandVerticesRef();
+	std::vector<size_t>& clothRightHandVertices = cloth.getRightHandVerticesRef();
 	skeletonMatch(human, cloth, humanRightHandVertices, clothRightHandVertices);
 }
 
-void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vector<Skeleton::vertex_descriptor>& humanHandVertices, std::vector<Skeleton::vertex_descriptor>& clothHandVertices )
+void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vector<size_t>& humanHandVertices, std::vector<size_t>& clothHandVertices )
 {
+	typedef SkeletonNode::Point Point;
 	float handLen = 0;
 	for(int i = 0; i < clothHandVertices.size()-1; i++)
 	{
@@ -108,14 +109,14 @@ void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vect
 	float intervalAdd = interval;
 	for (int i = 0; i < humanHandVertices.size()-1 && interpolatePointList.size() <= slice; i++)
 	{
-		Skeleton::vertex_descriptor from = humanHandVertices.at(i);
-		Skeleton::vertex_descriptor to = humanHandVertices.at(i+1);
+		size_t from = humanHandVertices.at(i);
+		size_t to = humanHandVertices.at(i+1);
 		float fromValue = curDis;
 		curDis += dis(human, from, to);		
 		while(curDis > intervalAdd)
 		{
-			Point fromPoint = human[from].point;
-			Point toPoint = human[to].point;
+			Point fromPoint = human.nodeAt(from)->point;
+			Point toPoint = human.nodeAt(to)->point;
 			interpolatePointList.push_back(interpolate(fromValue, curDis, fromPoint, toPoint,intervalAdd));
 			if(interpolatePointList.size() > slice)
 				break;
@@ -123,23 +124,23 @@ void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vect
 		}
 	}
 
-	Point clothNeck = cloth[cloth.mNeckIndex].point;
-	Point humanNeck = human[human.mNeckIndex].point;
-	double dx = clothNeck.x() - humanNeck.x();
-	double dy = clothNeck.y() - humanNeck.y();
-	double dz = clothNeck.z() - humanNeck.z();
+	Point clothNeck = cloth.nodeAt(cloth.getNeckIndex())->point;
+	Point humanNeck = human.nodeAt(human.getNeckIndex())->point;
+	double dx = clothNeck.values_[0] - humanNeck.values_[0];
+	double dy = clothNeck.values_[1] - humanNeck.values_[1];
+	double dz = clothNeck.values_[2] - humanNeck.values_[2];
 	for (int i = 0; i < interpolatePointList.size(); i++)
 	{
 		Point p = interpolatePointList[i];
-		interpolatePointList[i] = Point(p.x() + dx, p.y() + dy, p.z() + dz);
+		interpolatePointList[i] = Point(p.values_[0] + dx, p.values_[1] + dy, p.values_[2] + dz);
 	}
 
 	//clothHandVertices.insert(clothHandVertices.begin(), cloth.mNeckIndex);
-	interpolatePointList.insert(interpolatePointList.begin(), cloth[cloth.mNeckIndex].point);
+	interpolatePointList.insert(interpolatePointList.begin(), cloth.nodeAt(cloth.getNeckIndex())->point);
 	float fromValue = 0;
-	intervalAdd = interval + dis(cloth, cloth.mNeckIndex, clothHandVertices.at(0));
+	intervalAdd = interval + dis(cloth, cloth.getNeckIndex(), clothHandVertices.at(0));
 	int curClothNode = 0;
-	curDis = dis(cloth, cloth.mNeckIndex, clothHandVertices.at(curClothNode));
+	curDis = dis(cloth, cloth.getNeckIndex(), clothHandVertices.at(curClothNode));
 	for (int i = 1; i < interpolatePointList.size() && curClothNode < clothHandVertices.size(); i++)
 	{
 		while (curDis <= intervalAdd)
@@ -147,7 +148,7 @@ void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vect
 			Point fromPoint = interpolatePointList.at(i - 1);
 			Point toPoint = interpolatePointList.at(i);
 			Point targetPoint = interpolate(fromValue, intervalAdd, fromPoint, toPoint, curDis);
-			cloth[clothHandVertices.at(curClothNode)].delta = pointSub(targetPoint,cloth[clothHandVertices.at(curClothNode)].point);
+			cloth.nodeAt(clothHandVertices.at(curClothNode))->delta = pointSub(targetPoint,cloth.nodeAt(clothHandVertices.at(curClothNode))->point);
 			curClothNode++;
 			if(curClothNode < clothHandVertices.size())
 				curDis += dis(cloth, clothHandVertices.at(curClothNode-1), clothHandVertices.at(curClothNode));
@@ -161,30 +162,30 @@ void SkeletonUtility::skeletonMatch( Skeleton& human, Skeleton& cloth, std::vect
 	}
 }
 
-float SkeletonUtility::dis( Skeleton& skeleton, Skeleton::vertex_descriptor from, Skeleton::vertex_descriptor to )
+float SkeletonUtility::dis( Skeleton& skeleton, const size_t from, const size_t to )
 {
-	Point fromPoint = skeleton[from].point;
-	Point toPoint = skeleton[to].point;
-	double dx = fromPoint.x() - toPoint.x();
-	double dy = fromPoint.y() - toPoint.y();
-	double dz = fromPoint.z() - toPoint.z();
+	SkeletonNode::Point fromPoint = skeleton.nodeAt(from)->point;
+	SkeletonNode::Point toPoint = skeleton.nodeAt(to)->point;
+	double dx = fromPoint.values_[0] - toPoint.values_[0];
+	double dy = fromPoint.values_[1] - toPoint.values_[1];
+	double dz = fromPoint.values_[2] - toPoint.values_[2];
 	return sqrt(dx * dx + dy * dy + dz * dz);
 }
 
-SkeletonUtility::Point SkeletonUtility::interpolate( float from, float to, Point& fromPoint, Point& toPoint, float target )
+SkeletonNode::Point SkeletonUtility::interpolate( float from, float to, SkeletonNode::Point& fromPoint, SkeletonNode::Point& toPoint, float target )
 {
-	double dx = toPoint.x() - fromPoint.x();
-	double dy = toPoint.y() - fromPoint.y();
-	double dz = toPoint.z() - fromPoint.z();
+	double dx = toPoint.values_[0] - fromPoint.values_[0];
+	double dy = toPoint.values_[1] - fromPoint.values_[1];
+	double dz = toPoint.values_[2] - fromPoint.values_[2];
 
 	float scale = (target - from)/ (to - from);
 
-	return Point(fromPoint.x() + scale * dx, fromPoint.y() + scale * dy, fromPoint.z() + scale * dz);
+	return SkeletonNode::Point(fromPoint.values_[0] + scale * dx, fromPoint.values_[1] + scale * dy, fromPoint.values_[2] + scale * dz);
 }
 
-SkeletonUtility::Point SkeletonUtility::pointSub( const Point& a, const Point& b )
+SkeletonNode::Point SkeletonUtility::pointSub( const SkeletonNode::Point& a, const SkeletonNode::Point& b )
 {
-	return Point(a.x() - b.x(), a.y() - b.y(), a.z() - b.z());
+	return SkeletonNode::Point(a.values_[0] - b.values_[0], a.values_[1] - b.values_[1], a.values_[2] - b.values_[2]);
 }
 
 void SkeletonUtility::recomputeCorrepspondence( Skeleton& skeleton, Mesh& mesh, int numberOfCorrepondencePoint )
@@ -197,27 +198,16 @@ void SkeletonUtility::recomputeCorrepspondence( Skeleton& skeleton, Mesh& mesh, 
 		points.push_back(cgalPoint);
 	}
 	KNNSHelper knnsHelper(points);		
-	typedef Skeleton::vertex_property_type SkeletonNode;
-	BOOST_FOREACH(Skeleton::vertex_descriptor vd, boost::vertices(skeleton))
+	for(int i = 0; i < skeleton.nodeCount(); i++)
 	{
-		SkeletonNode& skeletonNode = skeleton[vd];
-		std::vector<int> lastCors = skeletonNode.correspondanceIndices;
-		skeletonNode.correspondanceIndices.clear();
-		auto skeletonPoint = skeletonNode.point;
-		knnsHelper.kNeighborSearch(Point_3(skeletonPoint.x(),skeletonPoint.y(),skeletonPoint.z()),numberOfCorrepondencePoint);
+		SkeletonNode* skeletonNode = skeleton.nodeAt(i);
+		skeletonNode->correspondanceIndices.clear();
+		SkeletonNode::Point skeletonPoint = skeletonNode->point;
+		knnsHelper.kNeighborSearch(Point_3(skeletonPoint.values_[0],skeletonPoint.values_[1],skeletonPoint.values_[2]),numberOfCorrepondencePoint);
 		for(KNNSHelper::KNNSHelperIterator it = knnsHelper.begin(); it != knnsHelper.end(); it++)
 		{
 			int neighbor = knnsHelper.getIndex(it);
-			bool correct = false;
-			for (int i = 0; i < lastCors.size(); i++)
-			{
-				if(neighbor == lastCors.at(i))
-				{
-					correct = true;
-					break;
-				}
-			}
-			skeletonNode.correspondanceIndices.push_back(neighbor);
+			skeletonNode->correspondanceIndices.push_back(neighbor);
 		}
 	}
 }

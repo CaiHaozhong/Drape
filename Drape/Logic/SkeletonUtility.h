@@ -22,11 +22,11 @@ public:
 	void recomputeCorrepspondence(Skeleton& skeleton, Mesh& mesh, int numberOfCorrepondencePoint);
 private:
 
-	float dis(Skeleton& skeleton, Skeleton::vertex_descriptor from, Skeleton::vertex_descriptor to);
+	float dis(Skeleton& skeleton, const size_t from, const size_t to);
 
-	Point interpolate(float from, float to, Point& fromPoint, Point& toPoint, float target);
+	SkeletonNode::Point interpolate(float from, float to, SkeletonNode::Point& fromPoint, SkeletonNode::Point& toPoint, float target);
 
-	Point pointSub(const Point& a, const Point& b);
+	SkeletonNode::Point pointSub(const SkeletonNode::Point& a, const SkeletonNode::Point& b);
 
-	void skeletonMatch(Skeleton& human, Skeleton& cloth, std::vector<Skeleton::vertex_descriptor>& humanHandVertices, std::vector<Skeleton::vertex_descriptor>& clothHandVertices);
+	void skeletonMatch(Skeleton& human, Skeleton& cloth, std::vector<size_t>& humanHandVertices, std::vector<size_t>& clothHandVertices);
 };

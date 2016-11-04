@@ -108,11 +108,11 @@ void CompositionWidget::moveCloth()
 	u.recomputeCorrepspondence(globalSkeletonContainer.getSkeletonRef(1),globalMeshContatiner.getMeshRef(1),300);
 
 	/* 计算移动向量 */
-	Kernel::Point_3 humanNeck = globalSkeletonContainer.getSkeletonRef(0)[globalSkeletonContainer.getSkeletonRef(0).mNeckIndex].point;
-	Kernel::Point_3 clothNeck = globalSkeletonContainer.getSkeletonRef(1)[globalSkeletonContainer.getSkeletonRef(1).mNeckIndex].point;
-	float deltaX = humanNeck.x() - clothNeck.x();
-	float deltaY = humanNeck.y() - clothNeck.y();
-	float deltaZ = humanNeck.z() - clothNeck.z();
+	SkeletonNode::Point humanNeck = globalSkeletonContainer.getSkeletonRef(0).nodeAt(globalSkeletonContainer.getSkeletonRef(0).getNeckIndex())->point;
+	SkeletonNode::Point clothNeck = globalSkeletonContainer.getSkeletonRef(1).nodeAt(globalSkeletonContainer.getSkeletonRef(1).getNeckIndex())->point;
+	float deltaX = humanNeck.values_[0] - clothNeck.values_[0];
+	float deltaY = humanNeck.values_[1] - clothNeck.values_[1];
+	float deltaZ = humanNeck.values_[2] - clothNeck.values_[2];
 	printf("%f,%f,%f\n",deltaX,deltaY,deltaZ);
 	Mesh& cloth = globalMeshContatiner.getMeshRef(1);
 	for(auto v_it = cloth.vertices_begin(); v_it != cloth.vertices_end(); v_it++)

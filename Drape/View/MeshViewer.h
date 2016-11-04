@@ -51,7 +51,7 @@ protected:
 private:
 
 	void debugDraw();	
-	Skeleton::vertex_iterator curNodeIter;
+//	Skeleton::vertex_iterator curNodeIter;
 
 	std::vector<VBOBufferName> mVBOBufferNameList;
 
